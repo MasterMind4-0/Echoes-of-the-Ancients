@@ -832,7 +832,6 @@ def barmini():
         T = random.choice(barminig)
         C = input(T + "\n")
         if C == T:
-            print('Correct!')
             correct_answers += 1
         else:
             print('You failed!')
@@ -842,8 +841,10 @@ def barmini():
         print('###--- You have found \033[3m4 Coins\033[0m! ---###')
         time.sleep(2)
         print(f'{bt} Thanks for the help!')
+        bartenderdrinks()
     else:
         print('You did not get all 4 correct. Better luck next time!')
+        bartenderdrinks()
 
 
 def blacksmith():
@@ -893,7 +894,7 @@ Your inventory: {inventory}
 Your pouch: {coinbag}
 Your weapons: {weapons}
 Your health: {health}\n
- ''')
+''')
     if T.lower() == "dagger":
         if 5 <= coinbag:
             weapons.append('Dagger - 4 Damage')
@@ -929,7 +930,7 @@ Your health: {health}\n
             print("You don't have enough coins!")
             blacksmithitems()
 
-    elif T.lower() == "l" or "leave":
+    elif T.lower() == "l" or T.lower() == "leave":
         print(f"{Name}: I'm ok.")
         time.sleep(2)
         print("\033[3mYou walk out of the blacksmith...\033[0m")
