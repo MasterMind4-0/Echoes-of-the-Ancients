@@ -827,40 +827,24 @@ def barmini():
     global coinbag
     print('Let us begin!')
     print('Just a reminder, you have to type back the number shown to win!')
-    T = random.choice(barminig)
-    C = input(T + "\n")
-    if C == T:
+    correct_answers = 0
+    for i in range(4):
         T = random.choice(barminig)
-        C = input(T + '\n')
-    elif C != T:
-        print('You failed!')
-        bartenderdrinks()
-        T = random.choice(barminig)
-        C = input(T + '\n')
+        C = input(T + "\n")
         if C == T:
-            T = random.choice(barminig)
-            C = input(T + '\n')
-        elif C != T:
+            print('Correct!')
+            correct_answers += 1
+        else:
             print('You failed!')
             bartenderdrinks()
-            T = random.choice(barminig)
-            C = input(T + '\n')
-            if C == T:
-                T = random.choice(barminig)
-                C = input(T + '\n')
-            elif C != T:
-                print('You failed!')
-                bartenderdrinks()
-                T = random.choice(barminig)
-                C = input(T + '\n')
-                if C == T:
-                    coinbag = coinbag+4
-                    print('###--- You have found \033[3m4 Coins\033[0m! ---###')
-                    time.sleep(2)
-                    print(f'{bt} Thanks for the help!')
-                elif C != T:
-                    print('You failed!')
-                    bartenderdrinks()
+    if correct_answers == 4:
+        coinbag = coinbag+4
+        print('###--- You have found \033[3m4 Coins\033[0m! ---###')
+        time.sleep(2)
+        print(f'{bt} Thanks for the help!')
+    else:
+        print('You did not get all 4 correct. Better luck next time!')
+
 
 def blacksmith():
     print('\033[3mlet us see what the blacksmith holds."\033[0m')
