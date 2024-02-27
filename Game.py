@@ -835,18 +835,24 @@ def barmini():
     elif C != T:
         print('You failed!')
         bartenderdrinks()
+        T = random.choice(barminig)
+        C = input(T + '\n')
         if C == T:
             T = random.choice(barminig)
             C = input(T + '\n')
         elif C != T:
             print('You failed!')
             bartenderdrinks()
+            T = random.choice(barminig)
+            C = input(T + '\n')
             if C == T:
                 T = random.choice(barminig)
                 C = input(T + '\n')
             elif C != T:
                 print('You failed!')
                 bartenderdrinks()
+                T = random.choice(barminig)
+                C = input(T + '\n')
                 if C == T:
                     coinbag = coinbag+4
                     print('###--- You have found \033[3m4 Coins\033[0m! ---###')
