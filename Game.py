@@ -7,6 +7,7 @@ import sys
 import random
 
 Name = "You don't have a name ￣へ￣"
+tsquestS = False
 outsideF = False
 questfailed = False
 lockedopen = False
@@ -21,6 +22,7 @@ damagemod = 0
 greetings = ["Hello!", "How do you do?", "Hi", "What?"]
 btgreetings = ["What is it today?", "Take your pick.", "Welcome.", "Anything your willing to drink?", "What would you like this fine evening?"]
 inventory = []
+coinbag = "0"
 weapons = ["Fists - 2 Damage", ]
 achievements = []
 c1 = "\033[3mSophia: \033[0m"
@@ -111,7 +113,8 @@ def CC2():
     doctor()
 
 def CC3():
-    inventory.append("Coin")
+    global coinbag
+    coinbag = coinbag + 1
     print('\033[3m"I will dig through the dresser!"\033[0m')
     time.sleep(2)
     print('You look through the dresser,')
@@ -121,7 +124,7 @@ def CC3():
     print('###--- You have found \033[3mCoin\033[0m! ---###')
 
 def RoomHos():
-    global doctors, gavecoin
+    global doctors, gavecoin, coinbag
     wait()
     print("You enter the room you started in...")
     time.sleep(2)
@@ -131,7 +134,7 @@ def RoomHos():
         print("As you enter, you see Sophia back where she was sitting, with a tall, dark-haired man.")
         doctor()
 
-    if "Coin" not in inventory and doctors == False and gavecoin:
+    if 1 > coinbag and doctors == False and gavecoin:
         Choice51 = input("Walk out of the room or wait for Sophia (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -141,7 +144,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif "Coin" not in inventory and doctors == False and gavecoin == False:
+    elif 1 > coinbag and doctors == False and gavecoin == False:
         Choice51 = input("Walk out of the room, wait for Sophia, or search the dresser? (1, 2, or 3?): \n")
 
         if Choice51 == "1":
@@ -155,7 +158,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if "Coin" not in inventory and doctors and gavecoin:
+    if 1 > coinbag and doctors and gavecoin:
         Choice51 = input("Walk out of the room? (1?): \n")
 
         if Choice51 == "1":
@@ -164,7 +167,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif "Coin" not in inventory and doctors and gavecoin == False:
+    elif 1 > coinbag and doctors and gavecoin == False:
         Choice51 = input("Walk out of the room or search the dresser? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -177,7 +180,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit() 
-    if "Coin" in inventory and doctors == False and gavecoin:
+    if 1 <= coinbag and doctors == False and gavecoin:
         Choice51 = input("Walk out of the room or wait for Sophia? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -187,7 +190,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif "Coin" in inventory and doctors == False and gavecoin == False:
+    elif 1 <= coinbag and doctors == False and gavecoin == False:
         Choice51 = input("Walk out of the room or wait for Sophia, (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -197,7 +200,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if "Coin" in inventory and doctors and gavecoin:
+    if 1 <= coinbag and doctors and gavecoin:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -206,7 +209,7 @@ def RoomHos():
             print('Invalid, ending game. :)')
             sys.exit()
 
-    elif "Coin" in inventory and doctors and gavecoin == False:
+    elif 1 <= coinbag and doctors and gavecoin == False:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -217,19 +220,19 @@ def RoomHos():
 
 def MainHos():
     wait()
-    global visit_rec, free, gavecoin
-    if "Coin" not in inventory and free == False:
+    global visit_rec, free, gavecoin, coinbag
+    if 1 < coinbag and free == False:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         print(f"{un}Hey! You're not supposed to be here! Go to your room please.")
         RoomHos()
-    elif "Coin" in inventory and free == False:
+    elif 1 >= coinbag and free == False:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         choice3 = input("He eyes the coin you're holding. Then he looks directly at you. (Give or not?)\n")
         if choice3.lower() == "give":
             gavecoin = True
             visit_rec = True
             free = True
-            inventory.remove('Coin')
+            coinbag = coinbag-1
             print("You toss the coin at him, he catches it.")
             time.sleep(2)
             print(f"{un} You're free to go.\nHe smiles.")
@@ -242,6 +245,9 @@ def MainHos():
             print("He glares at you,")
             time.sleep(2)
             RoomHos()
+        else:
+            print('You had one job')
+            sys.exit()
     elif free is True:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         time.sleep(2)
@@ -261,6 +267,7 @@ def MainHosV():
         MainHosV2()
 
 def MainHosV2():
+    global coinbag
     print("Before you even think of going back to your room,")
     time.sleep(2)
     print("The man suddenly gasps,")
@@ -283,7 +290,7 @@ def MainHosV2():
         T = input('\033[3m"Should I take it...?\033[0m (Y/N?)\n')
 
         if T.lower() == "y" and gavecoin == True:
-            inventory.append('Coin')
+            coinbag = coinbag+1
             inventory.append('Key')
             print('###--- You have found \033[3mCoin\033[0m! ---###')
             print('###--- You have found \033[3mKey\033[0m! ---###')
@@ -334,13 +341,14 @@ def LockedDoor():
         sys.exit()
 
 def office():
+    global coinbag
     wait()
     print("You find yourself in a damp room. There is one single torch lighting the room.")
     time.sleep(2)
     T = input("You see a desk, bookshelf, and table holding various doctor tools. (1, 2, or 3?)\n")
 
     if T == '1':
-        inventory.append('Coin')
+        coinbag = coinbag+1
         print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
         time.sleep(2)
         print('###--- you have found \033[3mCoin\033[0m! ---###')
@@ -392,17 +400,17 @@ def office():
         sys.exit()
 
 def RoomHosF():
-    if "Coin" not in inventory:
+    if 1 > coinbag:
         Choice51 = input("Get up and walk out of the room, wait for Sophia, or search the dresser? (1, 2, or 3?): \n")
 
-    elif "Coin" in inventory:
+    elif 1 <= coinbag:
         Choice51 = input("Get up and walk out of the room or wait for Sophia (1 or 2?): \n")
 
     if Choice51 == "1":
         CC1V()
     elif Choice51 == "2":
         CC2()
-    elif Choice51 == "3" and "Coin" not in inventory:
+    elif Choice51 == "3" and 1 > coinbag:
         CC3()
         time.sleep(2)
         RoomHos()
@@ -518,7 +526,7 @@ def outside():
             sys.exit()
 
 def barfight():
-    global health, drunk, drunk1, drunk2, drunk3, s1, c2, damagemod
+    global health, drunk, drunk1, drunk2, drunk3, s1, c2, damagemod, coinbag
     wait()
     if health <= 0:
         print('YOU DIED')
@@ -529,7 +537,7 @@ def barfight():
         drunk2 = 5
         drunk3 = 5
         inventory.append('Beer')
-        inventory.append('Coin')
+        coinbag = coinbag+1
         print('You won the fight!')
         print("###--- You have found \033[3mCoin\033[0m! ---###")
         print('###--- You have found \033[3mBeer\033[0m! ---###')
@@ -763,6 +771,7 @@ def bartender():
     bartenderdrinks()
 
 def bartenderdrinks():
+    global coinbag
     wait()
     T = input(f'''
 TAVERN
@@ -772,26 +781,30 @@ Stewed Mushrooms - 2 Coins
 
 If you want to leave, type L
               
-Your inventory: {inventory}\n
+Your inventory: {inventory}
+Your pouch: {coinbag}\n
  ''')
     if T.lower() == "beer":
-        if "Coin" in inventory:
+        if 1 <= coinbag:
             inventory.append('Beer')
-            inventory.remove('Coin')
+            coinbag = coinbag-1
             print("You've purchased beer!")
             print('###--- You have found \033[3mBeer\033[0m! ---###')
             bartenderdrinks()
 
-        elif "Coin" not in inventory:
+        elif 1 > coinbag:
             print("You don't have enough coins!")
             bartenderdrinks()
         
     elif T.lower() == "stewed mushrooms":
-        if "Coin" * 2 in inventory:
+        if 2 <= coinbag:
             inventory.append('Stewed Mushrooms')
-            inventory.remove("Coin" * 2)
+            coinbag = coinbag-2
             print('You purchased Stewed Mushrooms!')
             print('###--- You have found \033[3mStewed Mushrooms\033[0m! ---###')
+            bartenderdrinks()
+        elif 2 > coinbag:
+            print("You don't have enough coins!")
             bartenderdrinks()
 
     elif T.lower() == "l" or "leave":
@@ -809,6 +822,7 @@ def blacksmith():
     blacksmithint()
 
 def blacksmithint():
+    global coinbag
     wait()
     print('\033[3mYou enter the blacksmith...\033[0m')
     time.sleep(2)
@@ -835,7 +849,7 @@ def blacksmithint():
         sys.exit()
 
 def blacksmithitems():
-    global health, inventory, weapons
+    global health, inventory, weapons, coinbag
     wait()
     T = input(f'''
 BLACKSMITH
@@ -847,41 +861,42 @@ Armor - +10 Health - 10 Coins
 If you want to leave, type L
               
 Your inventory: {inventory}
+Your pouch: {coinbag}
 Your weapons: {weapons}
 Your health: {health}\n
  ''')
     if T.lower() == "dagger":
-        if "Coin" * 5 in inventory:
+        if 5 <= coinbag:
             weapons.append('Dagger - 4 Damage')
-            inventory.remove("Coin" * 5)
+            coinbag = coinbag-5
             print("You've purchased Dagger!")
             print('###--- You have found \033[3mDagger\033[0m! ---###')
             blacksmithitems()
-        elif "Coin" * 5 not in inventory:
+        elif 5 > coinbag:
             print("You don't have enough coins!")
             blacksmithitems()
         
     elif T.lower() == "shield":
-        if "Coin" * 5 in inventory:
+        if 5 <= coinbag:
             weapons.append('Shield')
-            inventory.remove('Coin' * 5)
+            coinbag = coinbag-5
             health = health+5
             print('You purchased Shield!')
             print('###--- You have found \033[3mShield\033[0m! ---###')
             blacksmithitems()
-        elif "Coin" * 5 not in inventory:
+        elif 5 > coinbag:
             print("You don't have enough coins!")
             blacksmithitems()
 
     elif T.lower() == "armor":
-        if "Coin" * 10 in inventory:
+        if 10 <= coinbag:
             weapons.append('Armor')
-            inventory.remove('Coin' * 10)
+            coinbag = coinbag-10
             health = health+10
             print('You purchased Armor!')
             print('###--- You have found \033[3mArmor\033[0m! ---###')
             blacksmithitems()
-        elif "Coin" * 10 not in inventory:
+        elif 10 > coinbag:
             print("You don't have enough coins!")
             blacksmithitems()
 
@@ -896,24 +911,112 @@ Your health: {health}\n
         sys.exit()
 
 def towns():
-    global questfailed
+    global questfailed, tsquestS, coinbag
     print('\033[3mYou enter the town square.\033[0m')
     time.sleep(2)
     if questfailed:
         print('The place is filled with markets stands and people.')
         townsn()
     elif questfailed == False:
-        T = input('The place is filled with market stands and people. One of the owners of a stands calls out to you...(Go or not?)\n')
-        if T.lower() == 'go':
-            print('\033[3m"No harm in see what is going on."\033[0m')
+        tsquestS = True
+        print('The place is filled with market stands and people. One of the owners of a stands calls out to you...')
+        time.sleep(2)
+        print('\033[3m"He seems familiar..."\033[0m')
+        wait()
+        questmark()
+    elif tsquestS:
+        print('As you enter Theo runs toward you.')
+        time.sleep(2)
+        print(f'{c4}{Name}! {Name}!')
+        time.sleep(2)
+        print('You stop and face him.')
+        time.sleep(2)
+        print(f'{c4}Thank goodness I caught up to you partner.')
+        time.sleep(2)
+        print('He finally catches his breath.')
+        time.sleep(2)
+        print(f'{c4}I need a favor. A small one oh please!')
+        T = input("I should probably help him, or should I? (Help or not?)\n")
+        if T.lower() == 'help':
+            print(f'{c4}THANK YOU!')
+            time.sleep(1)
+            print('He practically screams,')
             time.sleep(2)
-            wait()
-            print('\033[3m"He seems familiar..."\033[0m')
-            questmark()
-        elif T.lower() == 'not':
+            print(f"{c4}I need you to head to the blacksmith, he has some \033[3mWonderful\033[0m items that I must replenish at my stand!")
+            T = input(f'{c4}Do you think you can do that? (Y/N?)\n')
+            if T.lower() == 'y':
+                coinbag = coinbag+30
+                print(f'{c4}Thank you! Thank you! Thank you! THANK YOU!')
+                time.sleep(1)
+                print('He shakes your hand vigorously.')
+                time.sleep(2)
+                print(f'Here is some money that you can use to buy the items.')
+                time.sleep(2)
+                print('He fills your hands with coins.')
+                time.sleep(2)
+                print(f'{c4}That should be enough.')
+                time.sleep(1)
+                print('###--- You have found \033[3m30 Coins\033[0m! ---###')
+                time.sleep(2)
+                print(f'{c4}See me when you have gotten those \033[3marmor\033[0m pieces!')
+                time.sleep(2)
+                print('Quest: Buy three armor sets from the blacksmith')
+                outside()
+            elif T.lower() == "n":
+                questfailed = True
+                print(f'{c4}Oh... Ok.')
+                time.sleep(2)
+                print('Theo sighs and returns to his stand.')
+                time.sleep(2)
+                print('\033[3m"I do not think I will see him again..."\033[0m')
+                outside()
+            else:
+                print('You had one job')
+                sys.exit()
+        elif T.lower() == "n":
             questfailed = True
+            print(f'{c4}Oh... Ok.')
+            time.sleep(2)
+            print('Theo sighs and returns to his stand.')
+            time.sleep(2)
+            print('\033[3m"I do not think I will see him again..."\033[0m')
+            outside()
         else:
-            print("Invalid, quiting :)")
+            print('You had one job...')
+            sys.exit()
+    elif tsquestS and "Armor" *3 in inventory:
+        inventory.append('Armor')
+        inventory.append('Armor')
+        inventory.append('Armor')
+        print('Theo runs toward you.')
+        time.sleep(2)
+        print(f'{c4}My armor!')
+        time.sleep(1)
+        print(f'{c4}Thank you! Thank you!')
+        time.sleep(2)
+        print(f'{c4}Ok, follow me-')
+        time.sleep(1)
+        print('He guides you to his stand,')
+        time.sleep(2)
+        print(f'{c4}Ok, thank you!')
+        time.sleep(1)
+        print(f'{c4}Yes! Wonderful! Ok, ok.')
+        T = input(f'{c4}Ah! How about you keep one of these armor sets? (Y/N?)\n')
+        if T.lower() == "y":
+            inventory.append("Armor")
+            print(f'{c4}Well, thank you for your assistance!')
+            print('###--- You have found \033[3mArmor\033[0m! ---###')
+            outside()
+        elif T.lower() == 'n':
+            print('He looks at you.')
+            if "Armor" in inventory:
+                print(f'{c4}Ah, I see your wearing one. Well, um, good luck then!')
+                outside()
+            elif "Armor" not in inventory:
+                print(f'{c4}Well, ok. Best of luck!')
+                outside()
+        else:
+            print('You had one job')
             sys.exit()
 
 def townsn():
@@ -950,7 +1053,9 @@ def questmark():
         time.sleep(2)
         print(f'{mc}Good luck to you.')
         print('He says in a sorrow tone.')
-        townsn()
+        time.sleep(2)
+        print('You leave out of both embarrassment and confusement.')
+        outside()
     elif T == '2':
         print(f'{Name}: Good?')
         time.sleep(1)
@@ -1011,13 +1116,13 @@ Your inventory: {inventory}\n
             print("You had one job...")
             sys.exit()
 
-    print(f'{mc} Now \033[3mthat\033[0m is a good pick.')
-    time.sleep(2)
-    print(f'{Name}: Thanks!')
-    time.sleep(2)
-    print(f'{c4} Anytime friend! You can always come to me, \033[3mTheo\033[0m the Great for supplies!')
-    print('\033[3mTheo says to come back anytime.\033[0m')
-    outside()
+        print(f'{mc} Now \033[3mthat\033[0m is a good pick.')
+        time.sleep(2)
+        print(f'{Name}: Thanks!')
+        time.sleep(2)
+        print(f'{c4} Anytime friend! You can always come to me, \033[3mTheo\033[0m the Great for supplies!')
+        print('\033[3mTheo says to come back anytime.\033[0m')
+        outside()
 
 Name = character_customization()
 # Program Starts Here
