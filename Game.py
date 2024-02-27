@@ -7,6 +7,7 @@ import sys
 import random
 
 Name = "You don't have a name ￣へ￣"
+questf = False
 tsquestS = False
 outsideF = False
 questfailed = False
@@ -25,6 +26,7 @@ inventory = []
 coinbag = 0
 weapons = ["Fists - 2 Damage", ]
 achievements = []
+barminig = ['412', '567', '125671834070461456108936458', '1', '51', '1255', '164', '231', '176', '424365', '752', '79', '44']
 c1 = "\033[3mSophia: \033[0m"
 c2 = "man"
 c3 = "\033[3mThor the Blacksmith: \033[0m"
@@ -770,25 +772,25 @@ def bartender():
     bartenderdrinks()
 
 def bartenderdrinks():
-    global coinbag
+    global coinbag, health
     wait()
     T = input(f'''
 TAVERN
 
 Beer - 1 Coin
 Stewed Mushrooms - 2 Coins
+              
+Help the bartender - type help
 
 If you want to leave, type L
               
-Your inventory: {inventory}
 Your pouch: {coinbag}\n
- ''')
+''')
     if T.lower() == "beer":
         if 1 <= coinbag:
-            inventory.append('Beer')
             coinbag = coinbag-1
             print("You've purchased beer!")
-            print('###--- You have found \033[3mBeer\033[0m! ---###')
+            print('You consume the beer.')
             bartenderdrinks()
 
         elif 1 > coinbag:
@@ -797,24 +799,62 @@ Your pouch: {coinbag}\n
         
     elif T.lower() == "stewed mushrooms":
         if 2 <= coinbag:
-            inventory.append('Stewed Mushrooms')
+            health = 20
             coinbag = coinbag-2
             print('You purchased Stewed Mushrooms!')
-            print('###--- You have found \033[3mStewed Mushrooms\033[0m! ---###')
+            print('You consume the Stewed Mushrooms.')
             bartenderdrinks()
         elif 2 > coinbag:
             print("You don't have enough coins!")
             bartenderdrinks()
 
-    elif T.lower() == "l" or "leave":
+    elif T.lower() == "l" or T.lower() == "leave":
         print(f"{Name}: I'm ok.")
         time.sleep(2)
         print("\033[3mYou walk out of the bar...\033[0m")
         outside()
+    
+    elif T.lower() == 'help':
+        print(f'{bt}Thank goodness, I really needed some help.')
+        time.sleep(2)
+        barmini()
 
     else:
         print('Invalid, ending game. :)')
         sys.exit()
+
+def barmini():
+    global coinbag
+    print('Let us begin!')
+    print('Just a reminder, you have to type back the number shown to win!')
+    T = random.choice(barminig)
+    C = input(T + "\n")
+    if C == T:
+        T = random.choice(barminig)
+        C = input(T + '\n')
+    elif C != T:
+        print('You failed!')
+        bartenderdrinks()
+        if C == T:
+            T = random.choice(barminig)
+            C = input(T + '\n')
+        elif C != T:
+            print('You failed!')
+            bartenderdrinks()
+            if C == T:
+                T = random.choice(barminig)
+                C = input(T + '\n')
+            elif C != T:
+                print('You failed!')
+                bartenderdrinks()
+                if C == T:
+                    coinbag = coinbag+4
+                    print('###--- You have found \033[3m4 Coins\033[0m! ---###')
+                    time.sleep(2)
+                    print(f'{bt} Thanks for the help!')
+                elif C != T:
+                    print('You failed!')
+                    bartenderdrinks()
 
 def blacksmith():
     print('\033[3mlet us see what the blacksmith holds."\033[0m')
@@ -910,20 +950,20 @@ Your health: {health}\n
         sys.exit()
 
 def towns():
-    global questfailed, tsquestS, coinbag
+    global questfailed, tsquestS, coinbag, questf
     print('\033[3mYou enter the town square.\033[0m')
     time.sleep(2)
     if questfailed:
         print('The place is filled with markets stands and people.')
         townsn()
-    elif questfailed == False:
+    elif questfailed == False and tsquestS == False and questf == False:
         tsquestS = True
         print('The place is filled with market stands and people. One of the owners of a stands calls out to you...')
         time.sleep(2)
         print('\033[3m"He seems familiar..."\033[0m')
         wait()
         questmark()
-    elif tsquestS:
+    elif tsquestS and questf == False:
         print('As you enter Theo runs toward you.')
         time.sleep(2)
         print(f'{c4}{Name}! {Name}!')
@@ -984,6 +1024,8 @@ def towns():
             print('You had one job...')
             sys.exit()
     elif tsquestS and "Armor" *3 in inventory:
+        tsquestS = False
+        questf = True
         inventory.append('Armor')
         inventory.append('Armor')
         inventory.append('Armor')
@@ -1025,7 +1067,7 @@ def questmark():
     global mc, Name, questfailed, health, damagemod, inventory, achievements
     time.sleep(2)
     print(f'{mc}Hello! How you doing pal?!')
-    T = input('"Who are you?"' + 'or' + '"Good" (1 or 2?)\n')
+    T = input('"Who are you? "' + 'or' + '" Good" (1 or 2?)\n')
     if T == "1":
         questfailed = True
         print(f"{Name}: Who are you?")
