@@ -704,18 +704,18 @@ def bartalk():
     T = random.randint(1, 5)
     wait()
     print(f'\033[3mYou sit next to the {c2}\033[0m.')
-    if T == "1":
+    if T == 1:
         s1 = print(f'{un}So, what brings you here?')
-    elif T == '2':
+    elif T == 2:
         s1 = print(f'{un}Hi?')
-    elif T == "3":
+    elif T == 3:
         s1 = print(f'{un}So, why me?')
-    elif T == "4":
+    elif T == 4:
         s1 = print(f'{un}So, why are you talking to me?')
-    elif T == "5":
+    elif T == 5:
         s1 = print(f'The {c2} grumbles.')
     time.sleep(2)
-    print(s1)
+    s1
     time.sleep(2)
     bartalk2()
 
@@ -732,7 +732,6 @@ def bartalk2():
     elif y1 == "2":
         if c2.lower() == "man":
             names = ["Bouldermore", "Kourayue", "Firestarter", "Musk", "Picking"]
-
         elif c2.lower() == "woman":
             names = ["Shara", "Locus", "Sophia", "Picking", "Acadia"]
         T = random.choice(names)
@@ -741,7 +740,7 @@ def bartalk2():
             print(f"{Name}: Hey I know someone as Sophia!")
             time.sleep(2)
             print(f'{T}: Cool?')
-            bartalk2()
+        bartalk2()
 
     elif y1 == "3":
         print(f"The {c2} looks at you dead in the eyes.")
