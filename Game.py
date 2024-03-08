@@ -7,6 +7,8 @@ import sys
 import random
 
 Name = "You don't have a name ￣へ￣"
+CheckedDraw = False
+nextlevel = False
 questf = False
 tsquestS = False
 outsideF = False
@@ -39,7 +41,13 @@ mc = "\033[3mMerchant: \033[0m"
 drunk1 = 5
 drunk2 = 5
 drunk3 = 5
+goblin1 = 5
+goblin2 = 5
+goblin3 = 5
+goblin4 = 5
+goblin5 = 5
 drunk = "\033[3mDrunk\033[0m"
+gob = "\033[3mGoblin\033[0m"
 
 def character_customization():
     Name = input("Hello, what would you like your name to be?: ")
@@ -115,7 +123,8 @@ def CC2():
     doctor()
 
 def CC3():
-    global coinbag
+    global coinbag, CheckedDraw
+    CheckedDraw = True
     coinbag = coinbag + 1
     print('\033[3m"I will dig through the dresser!"\033[0m')
     time.sleep(2)
@@ -126,17 +135,20 @@ def CC3():
     print('###--- You have found \033[3mCoin\033[0m! ---###')
 
 def RoomHos():
-    global doctors, gavecoin, coinbag
-    wait()
-    print("You enter the room you started in...")
-    time.sleep(2)
+    global doctors, coinbag, CheckedDraw
+    if CheckedDraw:
+        wait()
+    elif CheckedDraw == False:
+        wait()
+        print("You enter the room you started in...")
+        time.sleep(2)
 
     if visit_rec and doctors == False:
         doctors = True
         print("As you enter, you see Sophia back where she was sitting, with a tall, dark-haired man.")
         doctor()
 
-    if 1 > coinbag and doctors == False and gavecoin:
+    if CheckedDraw and doctors == False and gavecoin:
         Choice51 = input("Walk out of the room or wait for Sophia (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -146,7 +158,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif 1 > coinbag and doctors == False and gavecoin == False:
+    elif CheckedDraw == False and doctors == False and gavecoin == False:
         Choice51 = input("Walk out of the room, wait for Sophia, or search the dresser? (1, 2, or 3?): \n")
 
         if Choice51 == "1":
@@ -160,7 +172,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if 1 > coinbag and doctors and gavecoin:
+    if CheckedDraw and doctors and gavecoin:
         Choice51 = input("Walk out of the room? (1?): \n")
 
         if Choice51 == "1":
@@ -169,7 +181,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif 1 > coinbag and doctors and gavecoin == False:
+    elif CheckedDraw == False and doctors:
         Choice51 = input("Walk out of the room or search the dresser? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -182,7 +194,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit() 
-    if 1 <= coinbag and doctors == False and gavecoin:
+    if CheckedDraw and doctors == False:
         Choice51 = input("Walk out of the room or wait for Sophia? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -192,7 +204,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif 1 <= coinbag and doctors == False and gavecoin == False:
+    elif CheckedDraw and doctors == False:
         Choice51 = input("Walk out of the room or wait for Sophia, (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -202,7 +214,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if 1 <= coinbag and doctors and gavecoin:
+    if CheckedDraw and doctors:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -211,7 +223,7 @@ def RoomHos():
             print('Invalid, ending game. :)')
             sys.exit()
 
-    elif 1 <= coinbag and doctors and gavecoin == False:
+    elif CheckedDraw and doctors:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -455,59 +467,37 @@ def doctor():
         print('Invalid, ending game. :)')
         sys.exit()
 
-def outsideF():
-    wait()
-
-
-    time.sleep(2)
-    T = input("You can head to the Drunken Kraken Tavern, the blacksmith, or the town square. (1, 2, or 3?)\n")
-
-    if T == "1":
-        DKtavernF()
-
-    elif T == "2":
-        blacksmith()
-
-    elif T == "3":
-        towns()
-
-    else:
-        print('Invalid, ending game. :)')
-        sys.exit()
-
 def outside():
     global outsideF
     wait()
     if outsideF == False:
+        outsideF = True
         print("You walk outside, the light blinds you.")
         time.sleep(2)
-
         if Villagename == True:
             print("You find yourself in the Tishun Village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
-
         elif Villagename == False:
             print("You find yourself in a village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
 
-            print("You look at the sign pointing in various directions.")
-            time.sleep(2)
-            T = input("You can head to the Drunken Kraken Tavern, the blacksmith, or the town square. (1, 2, or 3?)\n")
+        time.sleep(2)
+        T = input("You can head to the Drunken Kraken Tavern, the blacksmith, or the town square. (1, 2, or 3?)\n")
 
-            if T == "1":
-                DKtavern()
+        if T == "1":
+            DKtavern()
 
-            elif T == "2":
-                blacksmith()
+        elif T == "2":
+            blacksmith()
 
-            elif T == "3":
-                towns()
+        elif T == "3":
+            towns()
 
-            else:
-                print('Invalid, ending game. :)')
-                sys.exit()
+        else:
+            print('Invalid, ending game. :)')
+            sys.exit()
     elif outsideF:
         # MM
         print("You look at the sign pointing in various directions.")
@@ -755,7 +745,7 @@ def bartalk2():
         bartalk2()
     
     elif y1 == "4":
-        print(f'{Name} Thanks for the talk. \nYou say as you leave.')
+        print(f'{Name}: Thanks for the talk. \nYou say as you leave.')
         time.sleep(2)
         DKtavern1()
 
@@ -846,10 +836,43 @@ def barmini():
         print('You did not get all 4 correct. Better luck next time!')
         bartenderdrinks()
 
-
 def blacksmith():
-    print('\033[3mlet us see what the blacksmith holds."\033[0m')
-    blacksmithint()
+    if nextlevel:
+        print(f'{c3}Your back! Good, Timo was about to leave eh.')
+        wagon()
+    elif nextlevel == False:
+        print('\033[3mlet us see what the blacksmith holds."\033[0m')
+        blacksmithint()
+
+def blacksmithinfo():
+    global nextlevel
+    wait()
+    print(f'{c3}The names Thor, so, your interested ye?')
+    time.sleep(1)
+    T = input('\033[3m"What did I get myself into? I should probably say something..."\033[0m (Y/N)\n')
+    if T.lower() == 'y':
+        nextlevel = True
+        print(f'{Name}: Definitely.')
+        time.sleep(2)
+        print(f'{c3}Wonderful! Ok, so the job is simple.')
+        time.sleep(1)
+        print('\033[3m"The job..?"\033[0m')
+        time.sleep(1)
+        print(f'{c3}Oh your going to do is go with my mate, Timo. Real softy, anyhow. You go with him and simply guard the wagon.')
+        time.sleep(2)
+        print('You nod.')
+        time.sleep(1)
+        print(f'{c3}Great! Were done. See me when your ready.')
+        time.sleep(1)
+        print('\033[3mThor takes you outside\033[0m')
+        outside()
+    elif T.lower() == 'n':
+        print(f"{bs}That's a shame, now, I'll let you go. Just, don't tell anyone.")
+        time.sleep(2)
+        print('\033[3mFear strikes your heart.\033[0m')
+        time.sleep(1)
+        print('\033[3m"What did I just do..?"\033[0m')
+        outside()
 
 def blacksmithint():
     global coinbag
@@ -865,15 +888,15 @@ def blacksmithint():
     print('He pauses,')
     time.sleep(2)
     print(f"{bs}What would you like?")
-    T = input('Shop or leave?')
+    T = input('Shop or infomation?')
     if T.lower() == 'shop':
         print(f"{bs}Great to hear!")
         blacksmithitems()
-    elif T.lower() == 'leave' or 'l':
-        print(f'{bs}Well, comoe back if you require anything!')
+    elif T.lower() == 'info' or T.lower() == 'information':
+        print(f'{bs}Well, well! Ok, well, follow me.')
         time.sleep(2)
-        print('He yells as you leave...')
-        outside()
+        print('He guides you to a back room filled with armor, weapons, and tools.')
+        blacksmithinfo()
     else:
         print('Invalid, ending game. :)')
         sys.exit()
@@ -1156,6 +1179,213 @@ Your inventory: {inventory}\n
         print('\033[3mTheo says to come back anytime.\033[0m')
         outside()
 
+def wagon():
+    wait()
+    print('\033[3mYou hop on to the wagon. Timo is sitting holding the reins. He is a large male, one of his eyes is covered by a eye patch.\033[0m')
+    time.sleep(2)
+    print(f'{c3}Here,')
+    print('Thor is holding a bow in this grasp.')
+    print(f'{c3}you can take this bow.')
+    time.sleep(2)
+    T = input('Do you take the bow? Bow - Ranged, 5 Damage (Y/N)\n')
+    if T.lower() == "y":
+        weapons.append('Bow')
+        print('You grab the bow.')
+        print('###--- You have found \033[3mBow\033[0m! ---###')
+    elif T.lower() == 'n':
+        print(f'{c3}Suit yourself.')
+    time.sleep(2)
+    print("\033[3mAfter taking off you and Timo find yourselves in the woods, Timo doesn't talk much, so you mostly kept to yourself.")
+    wait()
+    print('While in the woods, suddenly, you hit a large bump. Nearly knocking you and your belongings off the wagon.')
+    time.sleep(2)
+    print('\033[3mTimo\033[0m: You, go check.')
+    print('Timo says in a course voice.')
+    time.sleep(2)
+    print('You, both freightened by Timo and the bump, hop off nerviously.')
+    time.sleep(2)
+    print('You look to see what you hit, and it seems to be a large green bump.')
+    T = input('Check it out? (Y/N?)\n')
+    if T.lower() == 'y':
+        print('You crouch down to see the problem, but suddenly the world goes dark as you get bagged.')
+        time.sleep(2)
+        print('You can hear Timo screaming at the creature that took you. But he never comes.')
+        time.sleep(2)
+        print('You thrown on to another wagon, you assume, and are taken to some unknown place.')
+        anewworld()
+    elif T.lower() == 'n':
+        T = random.randint(1, 6)
+        print('\033[3m"Heck no."\033[0m')
+        time.sleep(1)
+        print(f'{Name}: Hey! We hit something strange!')
+        time.sleep(1)
+        print('You hop on the wagon, Timo is glaring behind you.')
+        time.sleep(2)
+        print('You mouth the words, "What?"')
+        time.sleep(2)
+        print('Timo continues to stare.')
+        time.sleep(2)
+        if T <= 3:
+            print("You look behind you, you don't see a thing.")
+            time.sleep(2)
+            print('But suddenly, a small goblin jumps out screaming.')
+            time.sleep(1)
+            battle()
+        elif T > 3:
+            print('You look behind you, into the bushes. You see a small goblin hiding in there.')
+            T = input('Use your bow? (Y/N)\n')
+            if T.lower() == "y":
+                T = random.randint(1, 6)
+                print('You lift your bow to the goblin')
+                print('You pull the string back.')
+                time.sleep(2)
+                print('\033[3mFling!\033[0m')
+                if T > 3:
+                    print('The arrow hits the goblin in the skull.')
+                    time.sleep(1)
+                    print('Instantly killing it. Soon, other goblins begin popping up...')
+                    battle()
+                elif T <= 3:
+                    print('You miss the goblin completely...')
+                    print('Temo: Pathetic.')
+                    time.sleep(2)
+                    T = input('"Shut up" or say nothing. (1 or 2?)\n')
+                    if T.lower() == "1":
+                        print(f'{Name}: Shut up.')
+                        time.sleep(1)
+                        print('Surprisingly, Timo does shut up.')
+                    elif T.lower() == "2":
+                        print('You scoff.')
+                    else:
+                        print('You had one job')
+                        sys.exit()
+                    print('The goblin houls, summoning other goblins to aid it.')
+                    battle()
+                else:
+                    print('you had one job')
+                    sys.exit()
+
+def battle():
+    global health, goblin1, goblin2, goblin3, goblin4, s1, c2, damagemod, coinbag
+    wait()
+    if health <= 0:
+        time.sleep(2)
+        print("You're shoved off the wagon by Timo. He disappears.")
+        time.sleep(2)
+        print('Suddenly the world goes dark as you get bagged.')
+        time.sleep(2)
+        print('You thrown on to another wagon, you assume, and are taken to some unknown place.')
+        anewworld()
+    if goblin1 <= 0 and goblin2 <= 0 and goblin3 <= 0 and goblin4 <= 0:
+        health = 20
+        goblin1 = 5
+        goblin2 = 5
+        goblin3 = 5
+        goblin4 = 5
+        inventory.append('Dagger')
+        coinbag = coinbag+5
+        print('You won the fight!')
+        print("###--- You have found \033[3m5 Coins\033[0m! ---###")
+        print('###--- You have found \033[3mDagger\033[0m! ---###')
+        outside()
+    print(f'{gob}1, {gob}2, {gob}3, and {gob}4 ')
+    
+
+
+    if T == "1":
+        print(f'You pick {gob}1!')
+        time.sleep(2)
+        print("You use the bow since they're in the distance.")
+        time.sleep(2)
+        T = "Bow"
+        if T.lower() == "bow":
+            print('You picked Bow!')
+            time.sleep(2)
+            T = random.randint(0, 20)
+            if T >= 15:
+                goblin1 = goblin1-5
+                goblin1 = goblin1-damagemod
+                print(f'You hit and dealt {5+damagemod} damage!')
+                battle()
+
+            elif T < 15:
+                health = health-3
+                print(f'You missed and gave the {gob}1 an opportunity to hit!')
+                time.sleep(1)
+                print('You take 3 damage!')
+                battle()
+
+    elif T == "2":
+        print(f'You pick {gob}2!')
+        time.sleep(2)
+        print("You use the bow since they're in the distance.")
+        time.sleep(2)
+        T = "Bow"
+        if T.lower() == "bow":
+            print('You picked Bow!')
+            time.sleep(2)
+            T = random.randint(0, 20)
+            if T >= 15:
+                goblin2 = goblin2-5
+                goblin2 = goblin2-damagemod
+                print(f'You hit and dealt {5+damagemod} damage!')
+                battle()
+
+            elif T < 15:
+                health = health-3
+                print(f'You missed and gave the {gob}2 an opportunity to hit!')
+                time.sleep(1)
+                print('You take 3 damage!')
+                battle()
+
+    elif T == "3":
+        print(f'You pick {gob}3!')
+        time.sleep(2)
+        print("You use the bow since they're in the distance.")
+        time.sleep(2)
+        T = "Bow"
+        if T.lower() == "bow":
+            print('You picked Bow!')
+            time.sleep(2)
+            T = random.randint(0, 20)
+            if T >= 15:
+                goblin3 = goblin3-5
+                goblin3 = goblin3-damagemod
+                print(f'You hit and dealt {5+damagemod} damage!')
+                battle()
+
+            elif T < 15:
+                health = health-3
+                print(f'You missed and gave the {gob}3 an opportunity to hit!')
+                time.sleep(1)
+                print('You take 3 damage!')
+                battle()
+    elif T == '4':
+        print(f'You pick {gob}4!')
+        time.sleep(2)
+        print("You use the bow since they're in the distance.")
+        time.sleep(2)
+        T = "Bow"
+        if T.lower() == "bow":
+            print('You picked Bow!')
+            time.sleep(2)
+            T = random.randint(0, 20)
+            if T >= 15:
+                goblin4 = goblin4-5
+                goblin4 = goblin4-damagemod
+                print(f'You hit and dealt {5+damagemod} damage!')
+                battle()
+
+            elif T < 15:
+                health = health-3
+                print(f'You missed and gave the {gob}4 an opportunity to hit!')
+                time.sleep(1)
+                print('You take 3 damage!')
+                battle()
+    else:
+        print('Invalid, ending game. :)')
+        sys.exit()
+
 Name = character_customization()
 # Program Starts Here
 
@@ -1166,7 +1396,7 @@ print("Before you are able to do anything, you hear someone.")
 time.sleep(2)
 print(un + "Oh! Finally, you're awake!")
 time.sleep(1)
-T = input('"Where am I?" or "Who are you?" (1 or 2): ')
+T = input('"Where am I?" or "Who are you?" (1 or 2)\n')
 
 if T.lower() == "1":
     Villagename = True
