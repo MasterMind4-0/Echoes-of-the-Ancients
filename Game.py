@@ -380,7 +380,7 @@ def office():
 
    
         elif T.lower() == "n":
-            print('\033[3m"I' + "ain't" + 'reading all that.\033[0m')
+            print('\033[3m"I ' + "ain't " + 'reading all that."\033[0m')
 
         else:
             print('Invalid, ending game. :)')
@@ -405,7 +405,7 @@ def office():
 
     T = input('\033[3m"Should I leave or continue?"\033[0m (Leave or continue?)\n')
 
-    if T.lower() == "leave":
+    if T.lower() == "leave" or T.lower() == "l":
         RoomHos()
     elif T.lower() == "continue":
         office()
@@ -1288,10 +1288,24 @@ def battle():
         print("###--- You have found \033[3m5 Coins\033[0m! ---###")
         print('###--- You have found \033[3mDagger\033[0m! ---###')
         outside()
-    print(f'{gob}1, {gob}2, {gob}3, and {gob}4 ')
+    if goblin1 > 0 and goblin2 > 0 and goblin3 > 0 and goblin4 > 0:
+        T = input(f'{gob}1, {gob}2, {gob}3, and {gob}4 (1, 2, 3, or 4?)\n')
+    elif goblin1 <= 0 and goblin2 > 0 and goblin3 > 0 and goblin4 > 0:
+        T = input(f'{gob}2, {gob}3, and {gob}4 (2, 3, or 4?)\n')
+    elif goblin1 <= 0 and goblin2 <= 0 and goblin3 > 0 and goblin4 > 0:
+        T = input(f'{gob}3, and {gob}4 (3 or 4?)\n')
+    elif goblin1 <= 0 and goblin2 <= 0 and goblin3 <= 0 and goblin4 > 0:
+        T = input(f'{gob}4 (4?)\n')
+    elif goblin1 <= 0 and goblin2 <= 0 and goblin3 > 0 and goblin4 <= 0:
+        T = input(f'{gob}1, {gob}2, {gob}3, and {gob}4 (1, 2, 3, or 4?)\n')
+    elif goblin1 > 0 and goblin2 <= 0 and goblin3 > 0 and goblin4 > 0:
+        T = input(f'{gob}1, {gob}3, and {gob}4 (1, 3, or 4?)\n')
+    elif goblin1 <= 0 and goblin2 > 0 and goblin3 <= 0 and goblin4 > 0:
+        T = input(f'{gob}1, {gob}2, and {gob}4 (1, 2, or 4?)\n')
+    elif goblin1 <= 0 and goblin2 > 0 and goblin3 > 0 and goblin4 <= 0:
+        T = input(f'{gob}1, {gob}2, and {gob}3 (1, 2, or 3?)\n')
+
     
-
-
     if T == "1":
         print(f'You pick {gob}1!')
         time.sleep(2)
@@ -1386,6 +1400,9 @@ def battle():
         print('Invalid, ending game. :)')
         sys.exit()
 
+def anewworld():
+    wait()
+    print('You awake in a damp, dark room. A torch shining in your face.')
 Name = character_customization()
 # Program Starts Here
 
