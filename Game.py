@@ -26,9 +26,9 @@ greetings = ["Hello!", "How do you do?", "Hi", "What?"]
 btgreetings = ["What is it today?", "Take your pick.", "Welcome.", "Anything your willing to drink?", "What would you like this fine evening?"]
 inventory = []
 coinbag = 0
-weapons = ["Fists - 2 Damage", ]
+weapons = ["Fists - 2 Damage"]
 achievements = []
-barminig = ['412', '567', '125671834070461456108936458', '1', '51', '1255', '164', '231', '176', '424365', '752', '79', '44']
+names = []
 c1 = "\033[3mSophia: \033[0m"
 c2 = "man"
 c3 = "\033[3mThor the Blacksmith: \033[0m"
@@ -50,16 +50,25 @@ drunk = "\033[3mDrunk\033[0m"
 gob = "\033[3mGoblin\033[0m"
 
 def character_customization():
+    global devtools, coinbag
+    leave = False
     Name = input("Hello, what would you like your name to be?: ")
     Choice = input(f"Great! So your name is {Name}? (Y/N)\n")
 
     if Choice.upper() == "Y":
         print("Great! Now let's continue...")
     elif Choice.lower() == "dev":
-        global devtools
         devtools = True
         print("DevTools enabled!")
-        character_customization()
+        while leave == False:
+            T = input('Enter code or l to leave:\n')
+            if T.lower() == 'l':
+                print('Leaving...')
+            elif T.lower() == 'money':
+                coinbag = 10000
+                print(f'Coinbag has {coinbag} coins.')
+            elif T.lower() == 'out':
+                outside()
     else:
         T = input("Oh. Ok, so would you like to restart? (Y/N)\n")
         if T.lower() == "y":
@@ -97,6 +106,8 @@ def CC1():
 
     elif T.lower() == 'left':
         print('\033[3m"Ok, definitely left,"\033[0m you think to yourself as you start heading left.')
+        time.sleep(2)
+        LockedDoor()
 
     else:
         print('Invalid, ending game. :)')
@@ -468,7 +479,7 @@ def doctor():
         sys.exit()
 
 def outside():
-    global outsideF
+    global outsideF, DKtaverne
     wait()
     if outsideF == False:
         outsideF = True
@@ -487,6 +498,7 @@ def outside():
         T = input("You can head to the Drunken Kraken Tavern, the blacksmith, or the town square. (1, 2, or 3?)\n")
 
         if T == "1":
+            DKtaverne = False
             DKtavern()
 
         elif T == "2":
@@ -518,145 +530,111 @@ def outside():
             sys.exit()
 
 def barfight():
-    global health, drunk, drunk1, drunk2, drunk3, s1, c2, damagemod, coinbag
+    global coinbag, drunk1, drunk2, drunk3, health, damagemod, inventory
     wait()
-    if health <= 0:
-        print('YOU DIED')
-        sys.exit()
-    if drunk1 <= 0 and drunk2 <= 0 and drunk3 <= 0:
-        health = 20
-        drunk1 = 5
-        drunk2 = 5
-        drunk3 = 5
-        inventory.append('Beer')
-        coinbag = coinbag+1
-        print('You won the fight!')
-        print("###--- You have found \033[3mCoin\033[0m! ---###")
-        print('###--- You have found \033[3mBeer\033[0m! ---###')
-        outside()
-    print('Prepare for battle...')
-    print("Some foes approach you.")
-    if drunk1 > 0 and drunk2 > 0 and drunk3 > 0:
-        T = input(f"Who do you pick to fight? {drunk}1, {drunk}2, or {drunk}3? (1, 2, or 3?)\n")
-    elif drunk1 <=0 and drunk2 > 0 and drunk3 > 0:
-        T = input(f"Who do you pick to fight? {drunk}2 or {drunk}3? (2 or 3?)\n")
-    elif drunk1 <=0 and drunk2 <=0 and drunk3 > 0:
-        T = input(f"Who do you pick to fight? {drunk}3? (3?)\n")
-    elif drunk1 > 0 and drunk2 <=0 and drunk3 > 0:
-        T = input(f"Who do you pick to fight? {drunk}1 or {drunk}3? (1 or 3?)\n")
-    elif drunk1 > 0 and drunk2 <= 0 and drunk3 <= 0:
-        T = input(f"Who do you pick to fight? {drunk}1? (1?)\n")
-    elif drunk1 <= 0 and drunk2 > 0 and drunk3 <= 0:
-        T = input(f"Who do you pick to fight? {drunk}2? (2?)\n")
+    while drunk1 > 0 and drunk2 > 0 and drunk3 > 0:
+        if health <= 0:
+            print('YOU DIED')
+            sys.exit()
+        print('Prepare for battle...')
+        print("Some foes approach you.")
+        if drunk1 > 0 and drunk2 > 0 and drunk3 > 0:
+            T = input(f"Who do you pick to fight? {drunk}1, {drunk}2, or {drunk}3? (1, 2, or 3?)\n")
+        elif drunk1 <=0 and drunk2 > 0 and drunk3 > 0:
+            T = input(f"Who do you pick to fight? {drunk}2 or {drunk}3? (2 or 3?)\n")
+        elif drunk1 <=0 and drunk2 <=0 and drunk3 > 0:
+            T = input(f"Who do you pick to fight? {drunk}3? (3?)\n")
+        elif drunk1 > 0 and drunk2 <=0 and drunk3 > 0:
+            T = input(f"Who do you pick to fight? {drunk}1 or {drunk}3? (1 or 3?)\n")
+        elif drunk1 > 0 and drunk2 <= 0 and drunk3 <= 0:
+            T = input(f"Who do you pick to fight? {drunk}1? (1?)\n")
+        elif drunk1 <= 0 and drunk2 > 0 and drunk3 <= 0:
+            T = input(f"Who do you pick to fight? {drunk}2? (2?)\n")
 
-    if T == "1":
-        print(f'You pick {drunk}1!')
-        time.sleep(2)
-        print('Remember, you can only use your fists...')
-        time.sleep(2)
-        T = "fists"
-        if T.lower() == "fists":
-            print('You picked Fists!')
-            time.sleep(2)
+        if T == "1":
+            print(f'You pick {drunk}1!')
+            time.sleep(.5)
             T = random.randint(0, 10)
             if T >= drunk1:
                 drunk1 = drunk1-2
                 drunk1 = drunk1-damagemod
                 print(f'You hit and dealt {2+damagemod} damage!')
-                barfight()
 
             elif T < drunk1:
                 health = health-2
                 print(f'You missed and gave the {drunk}1 an opportunity to hit!')
-                time.sleep(1)
+                time.sleep(.5)
                 print('You take 2 damage!')
-                barfight()
-        else:
-            print('Invalid, ending game. Enter fists next time :)')
-            sys.exit()
 
-    elif T == "2":
-        print(f'You pick {drunk}2!')
-        time.sleep(2)
-        print('Remember, you can only use your fists...')
-        time.sleep(2)
-        print('Pick your weapon...')
-        time.sleep(2)
-        T = "fists"
-        if T.lower() == "fists":
-            print('You picked Fists!')
-            time.sleep(2)
+        elif T == "2":
+            print(f'You pick {drunk}2!')
+            time.sleep(.5)
             T = random.randint(0, 10)
             if T >= drunk2:
                 drunk2 = drunk2-2
                 drunk2 = drunk2-damagemod
                 print(f'You hit and dealt {2+damagemod} damage!')
-                barfight()
 
             elif T < drunk2:
                 health = health-2
                 print(f'You missed and gave the {drunk}2 an opportunity to hit!')
-                time.sleep(1)
+                time.sleep(.5)
                 print('You take 2 damage!')
-                barfight()
-        else:
-            print('Invalid, ending game. Enter fists next time :)')
-            sys.exit()
 
-    elif T == "3":
-        print(f'You pick {drunk}3!')
-        time.sleep(2)
-        print('Remember, you can only use your fists...')
-        time.sleep(2)
-        print('Pick your weapon...')
-        time.sleep(2)
-        T = "fists"
-        if T.lower() == "fists":
-            print('You picked Fists!')
-            time.sleep(2)
+        elif T == "3":
+            print(f'You pick {drunk}3!')
+            time.sleep(.5)
             T = random.randint(0, 10)
             if T >= drunk3:
                 drunk3 = drunk3-2
                 drunk3 = drunk3-damagemod
                 print(f'You hit and dealt {2+damagemod} damage!')
-                barfight()
 
             elif T < drunk3:
                 health = health-2
                 print(f'You missed and gave the {drunk}3 an opportunity to hit!')
-                time.sleep(1)
+                time.sleep(.5)
                 print('You take 2 damage!')
-                barfight()
+
         else:
-            print('Invalid, ending game. Enter fists next time :)')
+            print('Invalid, ending game. :)')
             sys.exit()
-
-    else:
-        print('Invalid, ending game. :)')
-        sys.exit()
-
+    
+    health = 20
+    drunk1 = 5
+    drunk2 = 5
+    drunk3 = 5
+    inventory.append('Beer')
+    coinbag = coinbag+1
+    print('You won the fight!')
+    print("###--- You have found \033[3mCoin\033[0m! ---###")
+    print('###--- You have found \033[3mBeer\033[0m! ---###')
+    bartender()
+    
 def DKtavernF():
-    print('\033[3m"A tavern sounds good."\033[0m You rub your belly.')
-    time.sleep(2)
-    wait()
-    print('As you enter the tavern, you quickly duck down. You watch in terror as a chair flies above you seemingly in slow motion.')
+    print('Suddenly, a chair flies above you seemingly in slow motion, you barely manange to quickly duck down.')
     time.sleep(3)
     print('You recover yourself and look into the tavern. You see a full on brawl, people bashing glasses into others and others smashing people with their fists!')
     barfight()
 
 def DKtavern():
+    global DKtaverne
     wait()
-    print('You enter the tavern.')
-    time.sleep(2)
-    print('The aroma of beer and food insteatly hits your nose.')
-    time.sleep(2)
-    print('Both making you sick and hungry.')
-    time.sleep(2)
-    DKtavern1()
+    if DKtaverne:
+        print('You enter the tavern.')
+        time.sleep(2)
+        print('The aroma of beer and food insteatly hits your nose.')
+        time.sleep(2)
+        print('Both making you sick and hungry.')
+        time.sleep(2)
+        DKtavern1()
+    else:
+        DKtaverne = True
+        DKtavernF()
 
 def DKtavern1():
         global c2
-        T = random.randint(1, 40)
+        T = random.randint(1, 60)
 
         if T < 10:
             barfight()
@@ -692,7 +670,11 @@ def DKtavern1():
             sys.exit()
 
 def bartalk():
-    global s1, c2
+    c2 = random.randint(1, 2)
+    if c2 == '1':
+        c2 = 'man'
+    else:
+        c2 = 'female'
     T = random.randint(1, 5)
     wait()
     print(f'\033[3mYou sit next to the {c2}\033[0m.')
@@ -712,37 +694,53 @@ def bartalk():
     bartalk2()
 
 def bartalk2():
-    global c2
-    T = "\033[3mUnknown\033[0m"
     y1 = input('Where am I, who are you, what do they sell, or leave? (1, 2, 3, or 4?)\n')
 
     if y1 == "1":
-        print(f"{T}: Welcome to \033[3mTishun Village\033[0m.")
-        time.sleep(2)
-        print(f'{T}: I guess it is pretty cool...')
-        bartalk(2)
+        if nameKN == False:
+            print(f"{un}Welcome to \033[3mTishun Village\033[0m.")
+            time.sleep(2)
+            print(f'{un}I guess it is pretty cool...')
+            bartalk2()
+        else:
+            print(f"{name__c}Welcome to \033[3mTishun Village\033[0m.")
+            time.sleep(2)
+            print(f'{name__c}I guess it is pretty cool...')
+            bartalk2()
+
     elif y1 == "2":
+        nameKN = True
         if c2.lower() == "man":
             names = ["Bouldermore", "Kourayue", "Firestarter", "Musk", "Picking"]
         elif c2.lower() == "woman":
             names = ["Shara", "Locus", "Sophia", "Picking", "Acadia"]
-        T = random.choice(names)
-        print(f"{T}: The name is {T}.")
+        name__c = random.choice(names)
+        print(f"{name__c}: The name is {name__c}.")
         if T.lower() == "sophia":
             print(f"{Name}: Hey I know someone as Sophia!")
             time.sleep(2)
-            print(f'{T}: Cool?')
+            print(f'{name__c}: Cool?')
         bartalk2()
 
     elif y1 == "3":
-        print(f"The {c2} looks at you dead in the eyes.")
-        time.sleep(2)
-        print(f"{T}: BEER")
-        time.sleep(2)
-        print(f"{T}: ...And some food.")
-        time.sleep(2)
-        print(f"{T}: I heard he is even looking for a hire.")
-        bartalk2()
+        if nameKN == False:
+            print(f"The {c2} looks at you dead in the eyes.")
+            time.sleep(2)
+            print(f"{T}: BEER")
+            time.sleep(2)
+            print(f"{T}: ...And some food.")
+            time.sleep(2)
+            print(f"{T}: I heard he is even looking for a hire.")
+            bartalk2()
+        else:
+            print(f"{name__c} looks at you dead in the eyes.")
+            time.sleep(2)
+            print(f"{name__c}: BEER")
+            time.sleep(2)
+            print(f"{name__c}: ...And some food.")
+            time.sleep(2)
+            print(f"{name__c}: I heard he is even looking for a hire.")
+            bartalk2()
     
     elif y1 == "4":
         print(f'{Name}: Thanks for the talk. \nYou say as you leave.')
@@ -815,25 +813,24 @@ Your pouch: {coinbag}\n
 
 def barmini():
     global coinbag
+    barminig = ['412', '567', '125671834070461456108936458', '1', '51', '1255', '164', '231', '176', '424365', '752', '79', '44']
     print('Let us begin!')
     print('Just a reminder, you have to type back the number shown to win!')
     correct_answers = 0
     for i in range(4):
         T = random.choice(barminig)
-        C = input(T + "\n")
-        if C == T:
-            correct_answers += 1
-        else:
-            print('You failed!')
-            bartenderdrinks()
-    if correct_answers == 4:
+        for correct_answers in range(4):
+            C = input(T + "\n")
+            if C == T:
+                correct_answers += 1
+            else:
+                print('You failed!')
+                bartenderdrinks()
+    
         coinbag = coinbag+4
         print('###--- You have found \033[3m4 Coins\033[0m! ---###')
         time.sleep(2)
         print(f'{bt} Thanks for the help!')
-        bartenderdrinks()
-    else:
-        print('You did not get all 4 correct. Better luck next time!')
         bartenderdrinks()
 
 def blacksmith():
@@ -841,7 +838,7 @@ def blacksmith():
         print(f'{c3}Your back! Good, Timo was about to leave eh.')
         wagon()
     elif nextlevel == False:
-        print('\033[3mlet us see what the blacksmith holds."\033[0m')
+        print('\033[3m"let us see what the blacksmith holds."\033[0m')
         blacksmithint()
 
 def blacksmithinfo():
@@ -888,7 +885,7 @@ def blacksmithint():
     print('He pauses,')
     time.sleep(2)
     print(f"{bs}What would you like?")
-    T = input('Shop or infomation?')
+    T = input('Shop or infomation?\n')
     if T.lower() == 'shop':
         print(f"{bs}Great to hear!")
         blacksmithitems()
@@ -1401,10 +1398,52 @@ def battle():
         sys.exit()
 
 def anewworld():
+    global inventory, coinbag
+    inventory = []
+    coinbag = None
     wait()
     print('You awake in a damp, dark room. A torch shining in your face.')
-Name = character_customization()
-# Program Starts Here
+    time.sleep(2)
+    print(f'{gob}1: Look! Look! He is wake!')
+    time.sleep(1)
+    print('As your eyes adjust to the light, you see two other goblins.')
+    time.sleep(2)
+    print(f'{gob}2: You been kidnapped!')
+    time.sleep(1)
+    print('The goblins snicker,')
+    time.sleep(1)
+    print(f'{gob}1: Come, Leader wish us not here.')
+    time.sleep(1)
+    print('You watch as the goblins mumble to themselves while walking out.')
+    time.sleep(2)
+    print("Soon it's just you alone, tied up in the corner of the cell.")
+    time.sleep(1)
+    esc()
+
+def esc():
+    global health
+    T = input('Do you attempt to rub the rope on the rough walls, try to bite through them, or accept your fate? (1, 2, or 3?)\n')
+    if T == '1':
+        health = health-2
+        print('You decided to use the wall to aid your escape.')
+        wait()
+        print('After some time, you finally manange to tear through the rope. After facing some burns yourself.')
+        time.sleep(2)
+    elif T == '2':
+        print('\033[3m"Maybe I can tear it with my teeth."\033[0m')
+        time.sleep(1)
+        print('You start using your mouth to bite down on the rope.')
+        wait()
+        print("After some time it finally ends up tearing.")
+        time.sleep(1)
+    elif T == '3':
+        print('You lay back into the stone. You accept your fate.')
+        sys.exit()
+    esc1()
+
+def esc1():
+    print('') 
+
 
 wait()
 print("You awake in a bed, the soft covers keeping you warm. You're in a room, fitted with a dresser and cobblestone walls.")
@@ -1423,14 +1462,15 @@ if T.lower() == "1":
     time.sleep(3)
     print('\033[3m"The name oddly rings a bell..."\033[0m')
     time.sleep(2)
+    print(f'{c1}: My name is Sophia by the way.')
 elif T.lower() == "2":
     print(Name + ": Who are you?")
     time.sleep(2)
+    print(c1 + "Oh! I'm \033[3mSophia\033[0m.")
 else:
     print('YOU HAD ONE JOB.')
     sys.exit()
 
-print(c1 + "Oh! I'm \033[3mSophia\033[0m.")
 time.sleep(2)
 print('\033[3m"Sophia..."\033[0m')
 time.sleep(2)
