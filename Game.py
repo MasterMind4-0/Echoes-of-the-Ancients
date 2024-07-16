@@ -20,6 +20,9 @@ Villagename = False
 devtools = False
 visit_rec = False
 free = False
+snooped = False
+snoopedD = False
+DKtaverne = False
 health = 20
 damagemod = 0
 greetings = ["Hello!", "How do you do?", "Hi", "What?"]
@@ -50,7 +53,7 @@ drunk = "\033[3mDrunk\033[0m"
 gob = "\033[3mGoblin\033[0m"
 
 def character_customization():
-    global devtools, coinbag
+    global devtools, coinbag, Name
     leave = False
     Name = input("Hello, what would you like your name to be?: ")
     Choice = input(f"Great! So your name is {Name}? (Y/N)\n")
@@ -64,6 +67,7 @@ def character_customization():
             T = input('Enter code or l to leave:\n')
             if T.lower() == 'l':
                 print('Leaving...')
+                break
             elif T.lower() == 'money':
                 coinbag = 10000
                 print(f'Coinbag has {coinbag} coins.')
@@ -292,7 +296,7 @@ def MainHosV():
         MainHosV2()
 
 def MainHosV2():
-    global coinbag
+    global coinbag, snooped
     print("Before you even think of going back to your room,")
     time.sleep(2)
     print("The man suddenly gasps,")
@@ -306,10 +310,15 @@ def MainHosV2():
     if T.lower() == "snoop":
         print('\033[3m"No harm in simply looking..."\033[0m')
         time.sleep(2)
-        if gavecoin == True:
+        if gavecoin and snooped:
+            print('There is nothing here in the drawer.')
+        elif gavecoin and snooped == False:
+            snooped = True
             print("You open the drawers, you find a key and your coin.")
-        
-        elif gavecoin == False:
+        elif gavecoin == False and snooped:
+            print('There is nothing here in the drawer.')
+        elif gavecoin == False and snooped == False:
+            snooped = True
             print('You open the drawers to find a key.')
     
         T = input('\033[3m"Should I take it...?\033[0m (Y/N?)\n')
@@ -366,19 +375,25 @@ def LockedDoor():
         sys.exit()
 
 def office():
-    global coinbag
+    global coinbag, snoopedD
     wait()
     print("You find yourself in a damp room. There is one single torch lighting the room.")
     time.sleep(2)
     T = input("You see a desk, bookshelf, and table holding various doctor tools. (1, 2, or 3?)\n")
 
     if T == '1':
-        coinbag = coinbag+1
-        print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
-        time.sleep(2)
-        print('###--- you have found \033[3mCoin\033[0m! ---###')
-        time.sleep(2)
-        T = input('Do you look at the papers? (Y/N?)\n')
+        if snoopedD:
+            coinbag = coinbag+1
+            print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
+            time.sleep(2)
+            print('###--- you have found \033[3mCoin\033[0m! ---###')
+            time.sleep(2)
+            T = input('Do you look at the papers? (Y/N?)\n')
+        elif snoopedD == False:
+            snoopedD = True
+            print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
+            time.sleep(2)
+            T = input('Do you look at the papers? (Y/N?)\n')
 
         if T.lower() == "y":
             print('\033[3m"I wonder what is on these things..."\033[0m')
@@ -481,8 +496,8 @@ def doctor():
 def outside():
     global outsideF, DKtaverne
     wait()
-    if outsideF == False:
-        outsideF = True
+    if outsideF:
+        outsideF = False
         print("You walk outside, the light blinds you.")
         time.sleep(2)
         if Villagename == True:
@@ -498,7 +513,6 @@ def outside():
         T = input("You can head to the Drunken Kraken Tavern, the blacksmith, or the town square. (1, 2, or 3?)\n")
 
         if T == "1":
-            DKtaverne = False
             DKtavern()
 
         elif T == "2":
@@ -510,7 +524,7 @@ def outside():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif outsideF:
+    elif outsideF == False:
         # MM
         print("You look at the sign pointing in various directions.")
         time.sleep(2)
@@ -904,9 +918,9 @@ def blacksmithitems():
     T = input(f'''
 BLACKSMITH
 
-Dagger - 4 Damage - 5 Coin
-Shield - +5 Health - 5 Coin
-Armor - +10 Health - 10 Coins
+Dagger - 4 Damage - 5 Coin #1
+Shield - +5 Health - 5 Coin #2
+Armor - +10 Health - 10 Coins #3
 
 If you want to leave, type L
               
@@ -915,7 +929,7 @@ Your pouch: {coinbag}
 Your weapons: {weapons}
 Your health: {health}\n
 ''')
-    if T.lower() == "dagger":
+    if T.lower() == "dagger" or T == '1':
         if 5 <= coinbag:
             weapons.append('Dagger - 4 Damage')
             coinbag = coinbag-5
@@ -926,9 +940,9 @@ Your health: {health}\n
             print("You don't have enough coins!")
             blacksmithitems()
         
-    elif T.lower() == "shield":
+    elif T.lower() == "shield" or T == "2":
         if 5 <= coinbag:
-            weapons.append('Shield')
+            inventory.append('Shield')
             coinbag = coinbag-5
             health = health+5
             print('You purchased Shield!')
@@ -938,9 +952,9 @@ Your health: {health}\n
             print("You don't have enough coins!")
             blacksmithitems()
 
-    elif T.lower() == "armor":
+    elif T.lower() == "armor" or T == '3':
         if 10 <= coinbag:
-            weapons.append('Armor')
+            inventory.append('Armor')
             coinbag = coinbag-10
             health = health+10
             print('You purchased Armor!')
@@ -1444,6 +1458,7 @@ def esc():
 def esc1():
     print('') 
 
+character_customization()
 
 wait()
 print("You awake in a bed, the soft covers keeping you warm. You're in a room, fitted with a dresser and cobblestone walls.")
