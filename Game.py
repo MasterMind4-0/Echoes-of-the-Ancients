@@ -1188,12 +1188,12 @@ def towns():
         else:
             print('You had one job...')
             sys.exit()
-    elif tsquestS and "Armor" *3 in inventory:
+    elif tsquestS and inventory.count('Armor') == 3:
         tsquestS = False
         questf = True
-        inventory.append('Armor')
-        inventory.append('Armor')
-        inventory.append('Armor')
+        inventory.remove('Armor')
+        inventory.remove('Armor')
+        inventory.remove('Armor')
         print('Theo runs toward you.')
         time.sleep(2)
         print(f'{c4}My armor!')
