@@ -1158,20 +1158,20 @@ Your health: {health}\n
         sys.exit()
 
 def towns():
-    global questfailed, tsquestS, coinbag, questf
+    global questfailed, coinbag, tbs
     print('\033[3mYou enter the town square.\033[0m')
     time.sleep(2)
     if questfailed:
         print('The place is filled with markets stands and people.')
         townsn()
-    elif questfailed == False and tsquestS == False and questf == False:
-        tsquestS = True
+    elif questfailed == False and tbs['tsquestS'] == False and tbs['questf'] == False:
+        tbs['tsquestS'] = True
         print('The place is filled with market stands and people. One of the owners of a stands calls out to you...')
         time.sleep(2)
         print('\033[3m"He seems familiar..."\033[0m')
         wait()
         questmark()
-    elif tsquestS and questf == False:
+    elif tbs['tsquestS'] and tbs['questf'] == False:
         print('As you enter Theo runs toward you.')
         time.sleep(2)
         print(f'{c4}{tbs["Name"]}! {tbs["Name"]}!')
@@ -1231,9 +1231,9 @@ def towns():
         else:
             print('You had one job...')
             sys.exit()
-    elif tsquestS and inventory.count('Armor') == 3:
-        tsquestS = False
-        questf = True
+    elif tbs['tsquestS'] and inventory.count('Armor') == 3:
+        tbs['tsquestS'] = False
+        tbs['questf'] = True
         inventory.remove('Armor')
         inventory.remove('Armor')
         inventory.remove('Armor')
