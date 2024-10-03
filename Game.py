@@ -87,6 +87,8 @@ def character_customization():
                 anewworld()
             elif T.lower() == 'wagon':
                 wagon()
+            elif T.lower() == 'tbs':
+                print(tbs)
             else:
                 print('Invaild')
     else:
