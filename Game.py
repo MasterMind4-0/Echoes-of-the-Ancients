@@ -19,7 +19,6 @@ tbs = {
     'doctors': False,
     'gavecoin': False,
     'Villagename': False,
-    'devtools': False,
     'visit_rec': False,
     'free': False,
     'snooped': False,
@@ -31,10 +30,10 @@ tbs = {
     'inventory': [],
     'coinbag': 0,
     'weapons': ["Fists - 2 Damage"],
-    'achievements': [],
-    'names': []
+    'achievements': []
 }
 
+devtools = False
 weaponsL = {
     'Dagger - 4 Damage': {'Damage': 4},
     "Fist - 2 Damage": {'Damage': 2},
@@ -62,7 +61,7 @@ drunk = "\033[3mDrunk\033[0m"
 gob = "\033[3mGoblin\033[0m"
 
 def character_customization():
-    global devtools, coinbag, tbs
+    global devtools, tbs
     leave = False
     tbs['Name'] = input("Hello, what would you like your name to be?: ")
     Choice = input(f"Great! So your name is {tbs['Name']}? (Y/N)\n")
@@ -78,8 +77,8 @@ def character_customization():
                 print('Leaving...')
                 break
             elif T.lower() == 'money':
-                coinbag = 10000
-                print(f'Coinbag has {coinbag} coins.')
+                tbs['coinbag'] = 10000
+                print(f'Coinbag has {tbs['coinbag']} coins.')
             elif T.lower() == 'out':
                 outside()
             elif T.lower() == 'barfight':
@@ -127,7 +126,7 @@ def start():
     time.sleep(.5)
     T = input('"Where am I?" or "Who are you?" (1 or 2)\n')
     if T.lower() == "1":
-        Villagename = True
+        tbs['Villagename'] = True
         print(tbs['Name'] + ": Where am I?")
         time.sleep(1)
         print(un + "You don't remember do you? Well, welcome to \033[3mTishun Village\033[0m!")
@@ -194,9 +193,9 @@ def CC2():
     doctor()
 
 def CC3():
-    global coinbag, tbs
+    global tbs
     tbs['CheckedDraw'] = True
-    coinbag = coinbag + 1
+    tbs['coinbag'] += 1
     print('\033[3m"I will dig through the dresser!"\033[0m')
     time.sleep(2)
     print('You look through the dresser,')
@@ -206,7 +205,7 @@ def CC3():
     print('###--- You have found \033[3mCoin\033[0m! ---###')
 
 def RoomHos():
-    global doctors, coinbag, tbs
+    global tbs
     if tbs['CheckedDraw']:
         wait()
     elif tbs['CheckedDraw'] == False:
@@ -214,12 +213,12 @@ def RoomHos():
         print("You enter the room you started in...")
         time.sleep(2)
 
-    if visit_rec and doctors == False:
-        doctors = True
+    if tbs['visit_rec'] and tbs['doctors'] == False:
+        tbs['doctors'] = True
         print("As you enter, you see Sophia back where she was sitting, with a tall, dark-haired man.")
         doctor()
 
-    if tbs['CheckedDraw'] and doctors == False and gavecoin:
+    if tbs['CheckedDraw'] and tbs['doctors'] == False and tbs['gavecoin']:
         Choice51 = input("Walk out of the room or wait for Sophia (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -229,7 +228,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif tbs['CheckedDraw'] == False and doctors == False and gavecoin == False:
+    elif tbs['CheckedDraw'] == False and tbs['doctors'] == False and tbs['gavecoin'] == False:
         Choice51 = input("Walk out of the room, wait for Sophia, or search the dresser? (1, 2, or 3?): \n")
 
         if Choice51 == "1":
@@ -243,7 +242,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if tbs['CheckedDraw'] and doctors and gavecoin:
+    if tbs['CheckedDraw'] and tbs['doctors'] and tbs['gavecoin']:
         Choice51 = input("Walk out of the room? (1?): \n")
 
         if Choice51 == "1":
@@ -252,7 +251,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif tbs['CheckedDraw'] == False and doctors:
+    elif tbs['CheckedDraw'] == False and tbs['doctors']:
         Choice51 = input("Walk out of the room or search the dresser? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -265,7 +264,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit() 
-    if tbs['CheckedDraw'] and doctors == False:
+    if tbs['CheckedDraw'] and tbs['doctors'] == False:
         Choice51 = input("Walk out of the room or wait for Sophia? (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -275,7 +274,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif tbs['CheckedDraw'] and doctors == False:
+    elif tbs['CheckedDraw'] and tbs['doctors'] == False:
         Choice51 = input("Walk out of the room or wait for Sophia, (1 or 2?): \n")
 
         if Choice51 == "1":
@@ -285,7 +284,7 @@ def RoomHos():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    if tbs['CheckedDraw'] and doctors:
+    if tbs['CheckedDraw'] and tbs['doctors']:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -294,7 +293,7 @@ def RoomHos():
             print('Invalid, ending game. :)')
             sys.exit()
 
-    elif tbs['CheckedDraw'] and doctors:
+    elif tbs['CheckedDraw'] and tbs['doctors']:
         Choice51 = input("Walk out of the room (1?): \n")
 
         if Choice51 == "1":
@@ -305,19 +304,19 @@ def RoomHos():
 
 def MainHos():
     wait()
-    global visit_rec, free, gavecoin, coinbag
-    if 1 < coinbag and free == False:
+    global tbs
+    if 1 < tbs['coinbag'] and tbs['free'] == False:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         print(f"{un}Hey! You're not supposed to be here! Go to your room please.")
         RoomHos()
-    elif 1 >= coinbag and free == False:
+    elif 1 >= tbs['coinbag'] and tbs['free'] == False:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         choice3 = input("He eyes the coin you're holding. Then he looks directly at you. (Give or not?)\n")
         if choice3.lower() == "give":
-            gavecoin = True
-            visit_rec = True
-            free = True
-            coinbag = coinbag-1
+            tbs['gavecoin'] = True
+            tbs['visit_rec'] = True
+            tbs['free'] = True
+            tbs['coinbag'] -= 1
             print("You toss the coin at him, he catches it.")
             time.sleep(2)
             print(f"{un} You're free to go.\nHe smiles.")
@@ -325,15 +324,15 @@ def MainHos():
             print('###--- You have lost \033[3mCoin\033[0m! ---###')
             MainHosV()
         elif choice3.lower() == "not":
-            visit_rec = True
-            free = False
+            tbs['visit_rec'] = True
+            tbs['free'] = False
             print("He glares at you,")
             time.sleep(2)
             RoomHos()
         else:
             print('You had one job')
             sys.exit()
-    elif free is True:
+    elif tbs['free'] is True:
         print("You walk into the house's main room. There is a desk with a person sitting there. He notices you looking at him.")
         time.sleep(2)
         print("He smiles at you.")
@@ -352,7 +351,7 @@ def MainHosV():
         MainHosV2()
 
 def MainHosV2():
-    global coinbag, snooped
+    global tbs
     print("Before you even think of going back to your room,")
     time.sleep(2)
     print("The man suddenly gasps,")
@@ -366,29 +365,29 @@ def MainHosV2():
     if T.lower() == "snoop":
         print('\033[3m"No harm in simply looking..."\033[0m')
         time.sleep(2)
-        if gavecoin and snooped:
+        if tbs['gavecoin'] and tbs['snooped']:
             print('There is nothing here in the drawer.')
-        elif gavecoin and snooped == False:
-            snooped = True
+        elif tbs['gavecoin'] and tbs['snooped'] == False:
+            tbs['snooped'] = True
             print("You open the drawers, you find a key and your coin.")
-        elif gavecoin == False and snooped:
+        elif tbs['gavecoin'] == False and tbs['snooped']:
             print('There is nothing here in the drawer.')
-        elif gavecoin == False and snooped == False:
-            snooped = True
+        elif tbs['gavecoin'] == False and tbs['snooped'] == False:
+            tbs['snooped'] = True
             print('You open the drawers to find a key.')
 
         T = input('\033[3m"Should I take it...?\033[0m (Y/N?)\n')
 
-        if T.lower() == "y" and gavecoin == True:
-            coinbag = coinbag+1
-            inventory.append('Key')
+        if T.lower() == "y" and tbs['gavecoin'] == True:
+            tbs['coinbag'] += 1
+            tbs['inventory'].append('Key')
             print('###--- You have found \033[3mCoin\033[0m! ---###')
             print('###--- You have found \033[3mKey\033[0m! ---###')
             print('\033[3m"I should head to my room with this stuff..."\033[0m')
             RoomHos()
 
-        if T.lower() == "y" and gavecoin == False:
-            inventory.append("Key")
+        if T.lower() == "y" and tbs['gavecon'] == False:
+            tbs['inventory'].append("Key")
             print('###--- You have found \033[3mKey\033[0m! ---###')
             print('\033[3m"I should head to my room with this..."\033[0m')
             RoomHos()
@@ -405,22 +404,22 @@ def MainHosV2():
         RoomHos()
 
 def LockedDoor():
-    global lockedopen
+    global tbs
     wait()
     Choice50 = input("You come to a dead end, the only thing that's there is a door. (Open or not?)\n")
 
-    if Choice50.lower() == "open" and "Key" not in inventory and lockedopen == False:
+    if Choice50.lower() == "open" and "Key" not in tbs['inventory'] and tbs['lockedopen'] == False:
         print("You try to open the door, but it is locked.")
         time.sleep(2)
         print('\033[3m"Guess I will head the other way,"\033[0m you turn around and walk forward.')
         MainHos()
-    elif Choice50.lower() == "open" and "Key" in inventory and lockedopen == False:
-        lockedopen = True
-        inventory.remove('Key')
+    elif Choice50.lower() == "open" and "Key" in tbs['inventory'] and tbs['lockedopen'] == False:
+        tbs['lockedopen'] = True
+        tbs['inventory'].remove('Key')
         print("You open the door.")
         print('###--- You have lost \033[3mKey\033[0m! ---###')
         office()
-    elif Choice50.lower() == "open" and lockedopen:
+    elif Choice50.lower() == "open" and tbs['lockedopen']:
         print('You open the door.')
         office()
     elif Choice50.lower() == "not":
@@ -431,22 +430,22 @@ def LockedDoor():
         sys.exit()
 
 def office():
-    global coinbag, snoopedD
+    global tbs
     wait()
     print("You find yourself in a damp room. There is one single torch lighting the room.")
     time.sleep(2)
     T = input("You see a desk, bookshelf, and table holding various doctor tools. (1, 2, or 3?)\n")
 
     if T == '1':
-        if snoopedD:
-            coinbag = coinbag+1
+        if tbs['snoopedD']:
+            tbs['coinbag'] += 1
             print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
             time.sleep(2)
             print('###--- you have found \033[3mCoin\033[0m! ---###')
             time.sleep(2)
             T = input('Do you look at the papers? (Y/N?)\n')
-        elif snoopedD == False:
-            snoopedD = True
+        elif tbs['snoopedD'] == False:
+            tbs['snoopedD'] = True
             print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
             time.sleep(2)
             T = input('Do you look at the papers? (Y/N?)\n')
@@ -496,17 +495,17 @@ def office():
         sys.exit()
 
 def RoomHosF():
-    if 1 > coinbag:
+    if 1 > tbs['coinbag']:
         Choice51 = input("Get up and walk out of the room, wait for Sophia, or search the dresser? (1, 2, or 3?): \n")
 
-    elif 1 <= coinbag:
+    elif 1 <= tbs['coinbag']:
         Choice51 = input("Get up and walk out of the room or wait for Sophia (1 or 2?): \n")
 
     if Choice51 == "1":
         CC1V()
     elif Choice51 == "2":
         CC2()
-    elif Choice51 == "3" and 1 > coinbag:
+    elif Choice51 == "3" and 1 > tbs['coinbag']:
         CC3()
         time.sleep(2)
         RoomHos()
@@ -515,7 +514,7 @@ def RoomHosF():
         sys.exit()
 
 def doctor():
-    doctors = True
+    tbs['doctors'] = True
     print(f"{dr}Well, you look...")
     time.sleep(2)
     print("\033[3mHe studies you\033[0m.")
@@ -528,8 +527,8 @@ def doctor():
     Choice = input(f"{c1}I think they're ready doctor. You feel fine right {tbs['Name']}? (Y/N?)\n")
 
     if Choice.lower() == 'y':
-        global free
-        free = True
+        global tbs
+        tbs['free'] = True
         print(f"{tbs['Name']}: I think I'm fine doctor.")
         time.sleep(2)
         print(f"{dr}That is simply wonderful to hear, you're welcome to leave at anytime.")
@@ -550,17 +549,17 @@ def doctor():
         sys.exit()
 
 def outside():
-    global outsideF, DKtaverne
+    global tbs, tbs
     wait()
-    if outsideF:
-        outsideF = False
+    if tbs['outsideF']:
+        tbs['outsideF'] = False
         print("You walk outside, the light blinds you.")
         time.sleep(2)
-        if Villagename == True:
+        if tbs['Villagename'] == True:
             print("You find yourself in the Tishun Village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
-        elif Villagename == False:
+        elif tbs['Villagename'] == False:
             print("You find yourself in a village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
@@ -580,7 +579,7 @@ def outside():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif outsideF == False:
+    elif tbs['outsideF'] == False:
         # MM
         print("You look at the sign pointing in various directions.")
         time.sleep(2)
@@ -600,10 +599,10 @@ def outside():
             sys.exit()
 
 def barfight():
-    global coinbag, drunk1, drunk2, drunk3, health, damagemod, inventory
+    global drunk1, drunk2, drunk3, tbs
     wait()
     while drunk1 > 0 or drunk2 > 0 or drunk3 > 0:
-        if health <= 0:
+        if tbs['health'] <= 0:
             print('YOU DIED')
             sys.exit()
         print('Prepare for battle...')
@@ -627,12 +626,12 @@ def barfight():
             T = random.randint(0, 10)
             if T >= drunk1:
                 drunk1 = drunk1-2
-                drunk1 = drunk1-damagemod
-                print(f'You hit and dealt {2+damagemod} damage!')
+                drunk1 = drunk1-tbs['damagemod']
+                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
                 time.sleep(.5)
 
             elif T < drunk1:
-                health = health-2
+                tbs['health'] = tbs['health']-2
                 print(f'You missed and gave the {drunk}1 an opportunity to hit!')
                 time.sleep(.5)
                 print('You take 2 damage!')
@@ -644,12 +643,12 @@ def barfight():
             T = random.randint(0, 10)
             if T >= drunk2:
                 drunk2 = drunk2-2
-                drunk2 = drunk2-damagemod
-                print(f'You hit and dealt {2+damagemod} damage!')
+                drunk2 = drunk2-tbs['damagemod']
+                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
                 time.sleep(.5)
 
             elif T < drunk2:
-                health = health-2
+                tbs['health'] = tbs['health']-2
                 print(f'You missed and gave the {drunk}2 an opportunity to hit!')
                 time.sleep(.5)
                 print('You take 2 damage!')
@@ -661,12 +660,12 @@ def barfight():
             T = random.randint(0, 10)
             if T >= drunk3:
                 drunk3 = drunk3-2
-                drunk3 = drunk3-damagemod
-                print(f'You hit and dealt {2+damagemod} damage!')
+                drunk3 = drunk3-tbs['damagemod']
+                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
                 time.sleep(.5)
 
             elif T < drunk3:
-                health = health-2
+                tbs['health'] = tbs['health']-2
                 print(f'You missed and gave the {drunk}3 an opportunity to hit!')
                 time.sleep(.5)
                 print('You take 2 damage!')
@@ -676,12 +675,12 @@ def barfight():
             print('Invalid, ending game. :)')
             sys.exit()
 
-    health = 20
+    tbs['health'] = 20
     drunk1 = 5
     drunk2 = 5
     drunk3 = 5
-    inventory.append('Beer')
-    coinbag = coinbag+1
+    tbs['inventory'].append('Beer')
+    tbs['coinbag'] += 1
     print('You won the fight!')
     print("###--- You have found \033[3mCoin\033[0m! ---###")
     print('###--- You have found \033[3mBeer\033[0m! ---###')
@@ -694,9 +693,9 @@ def DKtavernF():
     barfight()
 
 def DKtavern():
-    global DKtaverne
+    global tbs
     wait()
-    if DKtaverne:
+    if tbs['DKtaverne']:
         print('You enter the tavern.')
         time.sleep(2)
         print('The aroma of beer and food insteatly hits your nose.')
@@ -705,7 +704,7 @@ def DKtavern():
         time.sleep(2)
         DKtavern1()
     else:
-        DKtaverne = True
+        tbs['DKtaverne'] = True
         DKtavernF()
 
 def DKtavern1():
@@ -750,12 +749,12 @@ def DKtavern1():
             sys.exit()
 
 def DKtaverntable():
-    global coinbag, inventory, health
+    global tbs
     print("\033[3mYou walk to a table...\033[0m")
     time.sleep(2)
     print('\033[3mAs you sit, a waitress walks over,\033[0m')
     time.sleep(2)
-    if 'Beer' not in inventory:
+    if 'Beer' not in tbs['inventory']:
         print('\033[3mWaitress\033[0m: Would you like a beer?')
         time.sleep(.5)
         print('She smiles,')
@@ -768,15 +767,15 @@ Stewed Mushrooms - 2 Coins #2
 
 If you want to leave, type L
 
-Your pouch: {coinbag}\n
+Your pouch: {tbs['coinbag']}\n
 ''')
         if T.lower() == 'beer' or T == '1':
-            if 1 <= coinbag:
-                coinbag -= 1
+            if 1 <= tbs['coinbag']:
+                tbs['coinbag'] -= 1
                 print("You've purchased beer!")
                 print('You consume the beer.')
                 bartenderdrinks()
-            elif 1 > coinbag:
+            elif 1 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 time.sleep(2)
                 print(f"{tbs['Name']}: I'm afraid I don't have enough coins,")
@@ -786,13 +785,13 @@ Your pouch: {coinbag}\n
 
 
         elif T.lower() == "stewed mushrooms" or T == '2':
-            if 2 <= coinbag:
-                health = 20
-                coinbag -= 2
-                inventory.append('Stewed_Mushrooms')
+            if 2 <= tbs['coinbag']:
+                tbs['health'] = 20
+                tbs['coinbag'] -= 2
+                tbs['inventory'].append('Stewed_Mushrooms')
                 print('You purchased Stewed Mushrooms!')
                 bartenderdrinks()
-            elif 2 > coinbag:
+            elif 2 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 time.sleep(2)
                 print(f"{tbs['Name']}: I'm afraid I don't have enough coins,")
@@ -806,7 +805,7 @@ Your pouch: {coinbag}\n
             print(f"\033[3mYou get up to leave the tavern.\033[0m")
             outside()
 
-    elif 'Beer' in inventory:
+    elif 'Beer' in tbs['inventory']:
         print("\033[3mWaitress\033[0m: Oh! Looks like you've already got a beer. Well, enjoy yourself.")
         time.sleep(2)
         print('You smile,')
@@ -814,15 +813,15 @@ Your pouch: {coinbag}\n
         print('She leaves, leaving you and your beer.')
         time.sleep(2)
         while True:
-            ABeer = inventory.count('Beer')
+            ABeer = tbs['inventory'].count('Beer')
             if ABeer == 0:
                 print('You are out of beer, you leave your table.')
                 break
             elif ABeer > 0:
                 T = input(f'You have {ABeer} in your inventory, would you like to consume one? (Y/N?)\n')
                 if T.lower() == 'y':
-                    inventory.remove('Beer')
-                    ABeer = inventory.count('Beer')
+                    tbs['inventory'].remove('Beer')
+                    ABeer = tbs['inventory'].count('Beer')
                     print('You consume one beer from your inventory.')
                     time.sleep(2)
                     print(f'You have {ABeer} left...')
@@ -917,9 +916,9 @@ def bartender():
     bartenderdrinks()
 
 def bartenderdrinks():
-    global coinbag, health, inventory, barhelp
+    global tbs
     wait()
-    if barhelp == False:
+    if tbs['barhelp'] == False:
         T = input(f'''
 TAVERN
 
@@ -930,27 +929,27 @@ Help the bartender - type help
 
 If you want to leave, type L
 
-Your pouch: {coinbag}\n
+Your pouch: {tbs['coinbag']}\n
 ''')
         if T.lower() == "beer" or T == '1':
-            if 1 <= coinbag:
-                coinbag = coinbag-1
-                inventory.append('Beer')
+            if 1 <= tbs['coinbag']:
+                tbs['coinbag'] -= 1
+                tbs['inventory'].append('Beer')
                 print("You've purchased beer!")
                 bartenderdrinks()
 
-            elif 1 > coinbag:
+            elif 1 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 bartenderdrinks()
 
         elif T.lower() == "stewed mushrooms" or T == '2':
-            if 2 <= coinbag:
-                health = 20
-                coinbag = coinbag-2
-                inventory.append('Stewed_Mushrooms')
+            if 2 <= tbs['coinbag']:
+                tbs['health'] = 20
+                tbs['coinbag'] -= 2
+                tbs['inventory'].append('Stewed_Mushrooms')
                 print('You purchased Stewed Mushrooms!')
                 bartenderdrinks()
-            elif 2 > coinbag:
+            elif 2 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 bartenderdrinks()
 
@@ -970,7 +969,7 @@ Your pouch: {coinbag}\n
             sys.exit()
 
     else:
-        barhelp = False
+        tbs['barhelp'] = False
         T = input(f'''
 TAVERN
 
@@ -979,27 +978,27 @@ Stewed Mushrooms - 2 Coins #2
 
 If you want to leave, type L
 
-Your pouch: {coinbag}\n
+Your pouch: {tbs['coinbag']}\n
 ''')
         if T.lower() == "beer" or T == '1':
-            if 1 <= coinbag:
-                coinbag = coinbag-1
-                inventory.append('Beer')
+            if 1 <= tbs['coinbag']:
+                tbs['coinbag'] -= 1
+                tbs['inventory'].append('Beer')
                 print("You've purchased beer!")
                 bartenderdrinks()
 
-            elif 1 > coinbag:
+            elif 1 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 bartenderdrinks()
 
         elif T.lower() == "stewed mushrooms" or T == '2':
-            if 2 <= coinbag:
-                health = 20
-                coinbag = coinbag-2
-                inventory.append('Stewed_Mushrooms')
+            if 2 <= tbs['coinbag']:
+                tbs['health'] = 20
+                tbs['coinbag'] -= 2
+                tbs['inventory'].append('Stewed_Mushrooms')
                 print('You purchased Stewed Mushrooms!')
                 bartenderdrinks()
-            elif 2 > coinbag:
+            elif 2 > tbs['coinbag']:
                 print("\033[3mI don't have enough coins!\033[0m")
                 bartenderdrinks()
 
@@ -1008,7 +1007,7 @@ Your pouch: {coinbag}\n
             DKtaverntable()
 
 def barmini():
-    global coinbag, barhelp
+    global tbs
     barminig = ['412', '567', '125671834070461456108936458', '1', '51', '1255', '164', '231', '176', '424365', '752', '79', '44']
     print('Let us begin!')
     print('Just a reminder, you have to type back the number shown to win!')
@@ -1023,8 +1022,8 @@ def barmini():
                 print('You failed!')
                 bartenderdrinks()
 
-        barhelp = True
-        coinbag = coinbag+4
+        tbs['barhelp'] = True
+        tbs['coinbag'] += 4
         print('###--- You have found \033[3m4 Coins\033[0m! ---###')
         time.sleep(2)
         print(f'{bt} Thanks for the help!')
@@ -1069,7 +1068,7 @@ def blacksmithinfo():
         outside()
 
 def blacksmithint():
-    global coinbag
+    global tbs
     wait()
     print('\033[3mYou enter the blacksmith...\033[0m')
     time.sleep(2)
@@ -1096,7 +1095,7 @@ def blacksmithint():
         sys.exit()
 
 def blacksmithitems():
-    global health, inventory, weapons, coinbag
+    global tbs
     wait()
     T = input(f'''
 BLACKSMITH
@@ -1107,43 +1106,43 @@ Armor - +10 Health - 10 Coins #3
 
 If you want to leave, type L
 
-Your inventory: {inventory}
-Your pouch: {coinbag}
-Your weapons: {weapons}
-Your health: {health}\n
+Your inventory: {tbs['inventory']}
+Your pouch: {tbs['coinbag']}
+Your weapons: {tbs['weapons']}
+Your health: {tbs['health']}\n
 ''')
     if T.lower() == "dagger" or T == '1':
-        if 5 <= coinbag:
-            weapons.append('Dagger - 4 Damage')
-            coinbag = coinbag-5
+        if 5 <= tbs['coinbag']:
+            tbs['weapons'].append('Dagger - 4 Damage')
+            tbs['coinbag'] -= 5
             print("You've purchased Dagger!")
             print('###--- You have found \033[3mDagger\033[0m! ---###')
             blacksmithitems()
-        elif 5 > coinbag:
+        elif 5 > tbs['coinbag']:
             print("\033[3mI don't have enough coins!\033[0m")
             blacksmithitems()
 
     elif T.lower() == "shield" or T == "2":
-        if 5 <= coinbag:
-            inventory.append('Shield')
-            coinbag = coinbag-5
-            health = health+5
+        if 5 <= tbs['coinbag']:
+            tbs['inventory'].append('Shield')
+            tbs['coinbag'] -= 5
+            tbs['health'] += 5
             print('You purchased Shield!')
             print('###--- You have found \033[3mShield\033[0m! ---###')
             blacksmithitems()
-        elif 5 > coinbag:
+        elif 5 > tbs['coinbag']:
             print("\033[3mI don't have enough coins!\033[0m")
             blacksmithitems()
 
     elif T.lower() == "armor" or T == '3':
-        if 10 <= coinbag:
-            inventory.append('Armor')
-            coinbag = coinbag-10
-            health = health+10
+        if 10 <= tbs['coinbag']:
+            tbs['inventory'].append('Armor')
+            tbs['coinbag'] -= 10
+            health += 10
             print('You purchased Armor!')
             print('###--- You have found \033[3mArmor\033[0m! ---###')
             blacksmithitems()
-        elif 10 > coinbag:
+        elif 10 > tbs['coinbag']:
             print("\033[3mI don't have enough coins!\033[0m")
             blacksmithitems()
 
@@ -1158,13 +1157,13 @@ Your health: {health}\n
         sys.exit()
 
 def towns():
-    global questfailed, coinbag, tbs
+    global tbs
     print('\033[3mYou enter the town square.\033[0m')
     time.sleep(2)
-    if questfailed:
+    if tbs['questfailed']:
         print('The place is filled with markets stands and people.')
         townsn()
-    elif questfailed == False and tbs['tsquestS'] == False and tbs['questf'] == False:
+    elif tbs['questfailed'] == False and tbs['tsquestS'] == False and tbs['questf'] == False:
         tbs['tsquestS'] = True
         print('The place is filled with market stands and people. One of the owners of a stands calls out to you...')
         time.sleep(2)
@@ -1192,7 +1191,7 @@ def towns():
             print(f"{c4}I need you to head to the blacksmith, he has some \033[3mWonderful\033[0m items that I must replenish at my stand!")
             T = input(f'{c4}Do you think you can do that? (Y/N?)\n')
             if T.lower() == 'y':
-                coinbag = coinbag+30
+                tbs['coinbag'] += 30
                 print(f'{c4}Thank you! Thank you! Thank you! THANK YOU!')
                 time.sleep(1)
                 print('He shakes your hand vigorously.')
@@ -1210,7 +1209,7 @@ def towns():
                 print('Quest: Buy three armor sets from the blacksmith')
                 outside()
             elif T.lower() == "n":
-                questfailed = True
+                tbs['questfailed'] = True
                 print(f'{c4}Oh... Ok.')
                 time.sleep(2)
                 print('Theo sighs and returns to his stand.')
@@ -1221,7 +1220,7 @@ def towns():
                 print('You had one job')
                 sys.exit()
         elif T.lower() == "n":
-            questfailed = True
+            tbs['questfailed'] = True
             print(f'{c4}Oh... Ok.')
             time.sleep(2)
             print('Theo sighs and returns to his stand.')
@@ -1231,12 +1230,12 @@ def towns():
         else:
             print('You had one job...')
             sys.exit()
-    elif tbs['tsquestS'] and inventory.count('Armor') == 3:
+    elif tbs['tsquestS'] and tbs['inventory'].count('Armor') == 3:
         tbs['tsquestS'] = False
         tbs['questf'] = True
-        inventory.remove('Armor')
-        inventory.remove('Armor')
-        inventory.remove('Armor')
+        tbs['inventory'].remove('Armor')
+        tbs['inventory'].remove('Armor')
+        tbs['inventory'].remove('Armor')
         print('Theo runs toward you.')
         time.sleep(2)
         print(f'{c4}My armor!')
@@ -1252,16 +1251,16 @@ def towns():
         print(f'{c4}Yes! Wonderful! Ok, ok.')
         T = input(f'{c4}Ah! How about you keep one of these armor sets? (Y/N?)\n')
         if T.lower() == "y":
-            inventory.append("Armor")
+            tbs['inventory'].append("Armor")
             print(f'{c4}Well, thank you for your assistance!')
             print('###--- You have found \033[3mArmor\033[0m! ---###')
             outside()
         elif T.lower() == 'n':
             print('He looks at you.')
-            if "Armor" in inventory:
+            if "Armor" in tbs['inventory']:
                 print(f'{c4}Ah, I see your wearing one. Well, um, good luck then!')
                 outside()
-            elif "Armor" not in inventory:
+            elif "Armor" not in tbs['inventory']:
                 print(f'{c4}Well, ok. Best of luck!')
                 outside()
         else:
@@ -1272,12 +1271,12 @@ def townsn():
     wait()
 
 def questmark():
-    global mc, tbs, questfailed, health, damagemod, inventory, achievements
+    global mc, tbs,
     time.sleep(2)
     print(f'{mc}Hello! How you doing pal?!')
     T = input('"Who are you? "' + 'or' + '" Good" (1 or 2?)\n')
     if T == "1":
-        questfailed = True
+        tbs['questfailed'] = True
         print(f"{tbs['Name']}: Who are you?")
         time.sleep(2)
         print(f"{mc}That is gre-")
@@ -1345,20 +1344,20 @@ Iron-Plate Cloth #2
 Vanity-Thimble Cloth #3
 - Nothing (But you get to look cool, and who knows, it might get you some special reactions ¯\_( ͡° ͜ʖ ͡°)_/¯)
 
-Your inventory: {inventory}\n
+Your inventory: {tbs['inventory']}\n
 ''')
         if T.lower() == 'iron-claw cloth' or T == '1':
-            health = health+2
-            damagemod = damagemod+2
-            inventory.append('Iron-Claw Cloth')
+            tbs['health'] += 2
+            tbs['damagemod'] = tbs['damagemod']+2
+            tbs['inventory'].append('Iron-Claw Cloth')
             print('###--- You have found \033[3mIron-Claw Cloth\033[0m!')
         elif T.lower() == "iron-plate cloth" or T == '2':
-            health = health+4
-            inventory.append('Iron-Plate Cloth')
+            tbs['health'] += 4
+            tbs['inventory'].append('Iron-Plate Cloth')
             print('###--- You have found \033[3mIron-Plate Cloth\033[0m!')
         elif T.lower() == 'vanity-thimble cloth' or T == '3':
-            inventory.append('Vanity-Thimble Cloth')
-            achievements.append("I'm cool now Mom!")
+            tbs['inventory'].append('Vanity-Thimble Cloth')
+            tbs['achievements'].append("I'm cool now Mom!")
             print('###--- You have found \033[3mVanity-Thimble Cloth\033[0m!')
             print('###--- Achievement Unlocked!' + "\033[3mI'm cool now Mom\033[0m! ---###")
         else:
@@ -1383,7 +1382,7 @@ def wagon():
     time.sleep(2)
     T = input('Do you take the bow? Bow - 5 Damage (Y/N)\n')
     if T.lower() == "y":
-        weapons.append('Bow - 5 Damage')
+        tbs['weapons'].append('Bow - 5 Damage')
         print('You grab the bow.')
         print('###--- You have found \033[3mBow\033[0m! ---###')
     elif T.lower() == 'n':
@@ -1460,11 +1459,11 @@ def wagon():
                     sys.exit()
 
 def battle():
-    global health, goblin1, goblin2, goblin3, goblin4, c2, damagemod, coinbag, inventory, weapons
+    global tbs, goblin1, goblin2, goblin3, goblin4, c2
     wait()
     while goblin1 > 0 or goblin2 > 0 or goblin3 > 0 or goblin4 > 0:
 
-        if health <= 0:
+        if tbs['health'] <= 0:
             time.sleep(2)
             print("You're shoved off the wagon by Timo. He disappears.")
             time.sleep(2)
@@ -1472,13 +1471,13 @@ def battle():
             time.sleep(2)
             print('You thrown on to another wagon, you assume, and are taken to some unknown place.')
             anewworld()
-            health = 20
+            tbs['health'] = 20
             goblin1 = 5
             goblin2 = 5
             goblin3 = 5
             goblin4 = 5
-            weapons.append('Dagger - 4 Damage')
-            coinbag = coinbag+5
+            tbs['weapons'].append('Dagger - 4 Damage')
+            tbs['coinbag'] += 5
             print('You won the fight!')
             print("###--- You have found \033[3m5 Coins\033[0m! ---###")
             print('###--- You have found \033[3mDagger\033[0m! ---###')
@@ -1505,18 +1504,18 @@ def battle():
         if T == "1":
             print(f'You pick {gob}1!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{weapons}')
+            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
             time.sleep(2)
-            if weapon.lower() in weapons:
+            if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
                 time.sleep(2)
                 T = random.randint(0, 20)
                 if T >= 15:
-                    goblin1 -= weapons[weapon]['Damage']+damagemod
-                    print(f'You hit and dealt {weapons[weapon]["Damage"]+damagemod} damage!')
+                    goblin1 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
+                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
 
                 elif T < 15:
-                    health -= 3
+                    tbs['health'] -= 3
                     print(f'You missed and gave the {gob}1 an opportunity to hit!')
                     time.sleep(1)
                     print('You take 3 damage!')
@@ -1526,18 +1525,18 @@ def battle():
         elif T == "2":
             print(f'You pick {gob}2!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{weapons}')
+            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
             time.sleep(2)
-            if weapon.lower() in weapons:
+            if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
                 time.sleep(2)
                 T = random.randint(0, 20)
                 if T >= 15:
-                    goblin1 -= weapons[weapon]['Damage']+damagemod
-                    print(f'You hit and dealt {weapons[weapon]["Damage"]+damagemod} damage!')
+                    goblin1 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
+                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
 
                 elif T < 15:
-                    health -= 3
+                    tbs['health'] -= 3
                     print(f'You missed and gave the {gob}2 an opportunity to hit!')
                     time.sleep(1)
                     print('You take 3 damage!')
@@ -1547,18 +1546,18 @@ def battle():
         elif T == "3":
             print(f'You pick {gob}3!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{weapons}')
+            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
             time.sleep(2)
-            if weapon.lower() in weapons:
+            if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
                 time.sleep(2)
                 T = random.randint(0, 20)
                 if T >= 15:
-                    goblin3 -= weapons[weapon]['Damage']+damagemod
-                    print(f'You hit and dealt {weapons[weapon]["Damage"]+damagemod} damage!')
+                    goblin3 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
+                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
 
                 elif T < 15:
-                    health -= 3
+                    tbs['health'] -= 3
                     print(f'You missed and gave the {gob}3 an opportunity to hit!')
                     time.sleep(1)
                     print('You take 3 damage!')
@@ -1568,18 +1567,18 @@ def battle():
         elif T == "4":
             print(f'You pick {gob}4!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{weapons}')
+            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
             time.sleep(2)
-            if weapon.lower() in weapons:
+            if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
                 time.sleep(2)
                 T = random.randint(0, 20)
                 if T >= 15:
-                    goblin4 -= weapons[weapon]['Damage']+damagemod
-                    print(f'You hit and dealt {weapons[weapon]["Damage"]+damagemod} damage!')
+                    goblin4 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
+                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
 
                 elif T < 15:
-                    health -= 3
+                    tbs['health'] -= 3
                     print(f'You missed and gave the {gob}4 an opportunity to hit!')
                     time.sleep(1)
                     print('You take 3 damage!')
@@ -1591,9 +1590,9 @@ def battle():
             sys.exit()
 
 def anewworld():
-    global inventory, coinbag
-    inventory = []
-    coinbag = None
+    global tbs
+    tbs['inventory'] = []
+    tbs['coinbag'] = None
     wait()
     print('You awake in a damp, dark room. A torch shining in your face.')
     time.sleep(2)
@@ -1614,10 +1613,10 @@ def anewworld():
     esc()
 
 def esc():
-    global health
+    global tbs
     T = input('Do you attempt to rub the rope on the rough walls, try to bite through them, or accept your fate? (1, 2, or 3?)\n')
     if T == '1':
-        health = health-2
+        tbs['health'] -= 2
         print('You decided to use the wall to aid your escape.')
         wait()
         print('After some time, you finally manange to tear through the rope. After facing some burns yourself.')
