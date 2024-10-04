@@ -1,12 +1,13 @@
 # This code is made by MasterMind4-0
 # Hello!
 
-
-import time
-import sys
-import random
 import json
+import os
+import random
+import sys
+import time
 
+# Initial tbs dictionary
 tbs = {
     'Name': None,
     'CheckedDraw': False,
@@ -30,9 +31,9 @@ tbs = {
     'inventory': [],
     'coinbag': 0,
     'weapons': ["Fists - 2 Damage"],
-    'achievements': []
+    'achievements': [],
+    'arc': 0
 }
-
 devtools = False
 weaponsL = {
     'Dagger - 4 Damage': {'Damage': 4},
@@ -63,34 +64,40 @@ gob = "\033[3mGoblin\033[0m"
 def character_customization():
     global devtools, tbs
     leave = False
-    tbs['Name'] = input("Hello, what would you like your name to be?: ")
+    tbs['Name'] = input("Hello, what would you like your name to be? (Enter your previous character's name if you wish to play from a save file): ")
+    filename = f"{tbs['Name'.lower()]}.json"
+    if os.path.isfile(filename):
+        t = input(f"Would you look at that! We found a save with that name, would you prefer to load that character? (Y/N)\n {tbs['Name']}.")
+        if t.lower() == 'y':
+            print("Okay, let's load that character!")
+            with open(filename, 'r') as f:
+                loaded_data = json.load(f)
+                tbs.update(loaded_data)
+            print('Loaded! Enjoy...')
+            if tbs['arc'] == 1:
+                start()
+            elif tbs['arc'] == 2:
+                outside()
+            elif tbs['arc'] == 3:
+                anewworld()
     Choice = input(f"Great! So your name is {tbs['Name']}? (Y/N)\n")
-
     if Choice.upper() == "Y":
         print("Great! Now let's continue...")
     elif Choice.lower() == "dev":
         devtools = True
         print("DevTools enabled!")
-        while leave == False:
+        while not leave:
             T = input('Enter code or l to leave:\n')
             if T.lower() == 'l':
                 print('Leaving...')
                 break
             elif T.lower() == 'money':
                 tbs['coinbag'] = 10000
-                print(f'Coinbag has {tbs['coinbag']} coins.')
-            elif T.lower() == 'out':
-                outside()
-            elif T.lower() == 'barfight':
-                barfight()
-            elif T.lower() == 'a new world':
-                anewworld()
-            elif T.lower() == 'wagon':
-                wagon()
-            elif T.lower() == 'tbs':
-                print(tbs)
+                print(f'Coinbag has {tbs["coinbag"]} coins.')
+            # Additional dev tools commands...
             else:
-                print('Invaild')
+                print('Invalid')
+
     else:
         T = input("Oh. Ok, so would you like to restart? (Y/N)\n")
         if T.lower() == "y":
@@ -119,6 +126,10 @@ def wait():
         time.sleep(1)
 
 def start():
+    global tbs
+    tbs['arc'] = 1
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     print("You awake in a bed, the soft covers keeping you warm. You're in a room, fitted with a dresser and cobblestone walls.")
     time.sleep(2)
@@ -295,15 +306,6 @@ def RoomHos():
             print('Invalid, ending game. :)')
             sys.exit()
 
-    elif tbs['CheckedDraw'] and tbs['doctors']:
-        Choice51 = input("Walk out of the room (1?): \n")
-
-        if Choice51 == "1":
-            CC1V()
-        else:
-            print('Invalid, ending game. :)')
-            sys.exit()
-
 def MainHos():
     wait()
     global tbs
@@ -446,7 +448,7 @@ def office():
             print('###--- you have found \033[3mCoin\033[0m! ---###')
             time.sleep(2)
             T = input('Do you look at the papers? (Y/N?)\n')
-        elif tbs['snoopedD'] == False:
+        elif not tbs['snoopedD']:
             tbs['snoopedD'] = True
             print("You walk to the desk, there are papers on it, with a fitting bottle of ink and quill. As well as a coin.")
             time.sleep(2)
@@ -516,6 +518,7 @@ def RoomHosF():
         sys.exit()
 
 def doctor():
+    global tbs
     tbs['doctors'] = True
     print(f"{dr}Well, you look...")
     time.sleep(2)
@@ -529,7 +532,6 @@ def doctor():
     Choice = input(f"{c1}I think they're ready doctor. You feel fine right {tbs['Name']}? (Y/N?)\n")
 
     if Choice.lower() == 'y':
-        global tbs
         tbs['free'] = True
         print(f"{tbs['Name']}: I think I'm fine doctor.")
         time.sleep(2)
@@ -551,17 +553,20 @@ def doctor():
         sys.exit()
 
 def outside():
-    global tbs, tbs
+    global tbs
+    tbs['arc'] = 2
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     if tbs['outsideF']:
         tbs['outsideF'] = False
         print("You walk outside, the light blinds you.")
         time.sleep(2)
-        if tbs['Villagename'] == True:
+        if tbs['Villagename']:
             print("You find yourself in the Tishun Village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
-        elif tbs['Villagename'] == False:
+        elif not tbs['Villagename']:
             print("You find yourself in a village.")
             time.sleep(2)
             print("You look at the sign pointing in various directions.")
@@ -581,7 +586,7 @@ def outside():
         else:
             print('Invalid, ending game. :)')
             sys.exit()
-    elif tbs['outsideF'] == False:
+    elif not tbs['outsideF']:
         # MM
         print("You look at the sign pointing in various directions.")
         time.sleep(2)
@@ -602,6 +607,8 @@ def outside():
 
 def barfight():
     global drunk1, drunk2, drunk3, tbs
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     while drunk1 > 0 or drunk2 > 0 or drunk3 > 0:
         if tbs['health'] <= 0:
@@ -629,7 +636,7 @@ def barfight():
             if T >= drunk1:
                 drunk1 = drunk1-2
                 drunk1 = drunk1-tbs['damagemod']
-                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
+                print(f'You hit and dealt {2+tbs["damagemod"]} damage!')
                 time.sleep(.5)
 
             elif T < drunk1:
@@ -646,7 +653,7 @@ def barfight():
             if T >= drunk2:
                 drunk2 = drunk2-2
                 drunk2 = drunk2-tbs['damagemod']
-                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
+                print(f'You hit and dealt {2+tbs["damagemod"]} damage!')
                 time.sleep(.5)
 
             elif T < drunk2:
@@ -663,7 +670,7 @@ def barfight():
             if T >= drunk3:
                 drunk3 = drunk3-2
                 drunk3 = drunk3-tbs['damagemod']
-                print(f'You hit and dealt {2+tbs['damagemod']} damage!')
+                print(f'You hit and dealt {2+tbs["damagemod"]} damage!')
                 time.sleep(.5)
 
             elif T < drunk3:
@@ -714,6 +721,8 @@ def DKtavern1():
         T = random.randint(1, 60)
 
         if T < 10:
+            with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+                json.dump(tbs, file)
             print('But soon you realize you walked yourself straight into a barfight.')
             barfight()
 
@@ -1032,10 +1041,10 @@ def barmini():
         bartenderdrinks()
 
 def blacksmith():
-    if tbs['nextlevel]:
+    if tbs['nextlevel']:
         print(f'{c3}Your back! Good, Timo was about to leave eh.')
         wagon()
-    elif tbs['nextlevel] == False:
+    elif tbs['nextlevel'] == False:
         print('\033[3m"let us see what the blacksmith holds."\033[0m')
         blacksmithint()
 
@@ -1046,7 +1055,7 @@ def blacksmithinfo():
     time.sleep(1)
     T = input('\033[3m"What did I get myself into? I should probably say something..."\033[0m (Y/N)\n')
     if T.lower() == 'y':
-        tbs['nextlevel] = True
+        tbs['nextlevel'] = True
         print(f'{tbs["Name"]}: Definitely.')
         time.sleep(2)
         print(f'{c3}Wonderful! Ok, so the job is simple.')
@@ -1273,7 +1282,7 @@ def townsn():
     wait()
 
 def questmark():
-    global mc, tbs,
+    global mc, tbs
     time.sleep(2)
     print(f'{mc}Hello! How you doing pal?!')
     T = input('"Who are you? "' + 'or' + '" Good" (1 or 2?)\n')
@@ -1375,6 +1384,8 @@ Your inventory: {tbs['inventory']}\n
         outside()
 
 def wagon():
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     print('\033[3mYou hop on to the wagon. Timo is sitting holding the reins. He is a large male, one of his eyes is covered by a eye patch.\033[0m')
     time.sleep(2)
@@ -1462,6 +1473,8 @@ def wagon():
 
 def battle():
     global tbs, goblin1, goblin2, goblin3, goblin4, c2
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     while goblin1 > 0 or goblin2 > 0 or goblin3 > 0 or goblin4 > 0:
 
@@ -1506,7 +1519,7 @@ def battle():
         if T == "1":
             print(f'You pick {gob}1!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
+            weapon = input(f'Which weapon do you pick?\n{tbs["weapons"]}')
             time.sleep(2)
             if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
@@ -1514,7 +1527,7 @@ def battle():
                 T = random.randint(0, 20)
                 if T >= 15:
                     goblin1 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
-                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
+                    print(f'You hit and dealt {tbs["weapons"][weapon]["Damage"]+tbs["damagemod"]} damage!')
 
                 elif T < 15:
                     tbs['health'] -= 3
@@ -1527,7 +1540,7 @@ def battle():
         elif T == "2":
             print(f'You pick {gob}2!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
+            weapon = input(f'Which weapon do you pick?\n{tbs["weapons"]}')
             time.sleep(2)
             if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
@@ -1535,7 +1548,7 @@ def battle():
                 T = random.randint(0, 20)
                 if T >= 15:
                     goblin1 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
-                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
+                    print(f'You hit and dealt {tbs["weapons"][weapon]["Damage"]+tbs["damagemod"]} damage!')
 
                 elif T < 15:
                     tbs['health'] -= 3
@@ -1548,7 +1561,7 @@ def battle():
         elif T == "3":
             print(f'You pick {gob}3!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
+            weapon = input(f'Which weapon do you pick?\n{tbs["weapons"]}')
             time.sleep(2)
             if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
@@ -1556,7 +1569,7 @@ def battle():
                 T = random.randint(0, 20)
                 if T >= 15:
                     goblin3 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
-                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
+                    print(f'You hit and dealt {tbs["weapons"][weapon]["Damage"]+tbs["damagemod"]} damage!')
 
                 elif T < 15:
                     tbs['health'] -= 3
@@ -1569,7 +1582,7 @@ def battle():
         elif T == "4":
             print(f'You pick {gob}4!')
             time.sleep(2)
-            weapon = input(f'Which weapon do you pick?\n{tbs['weapons']}')
+            weapon = input(f'Which weapon do you pick?\n{tbs["weapons"]}')
             time.sleep(2)
             if weapon.lower() in tbs['weapons']:
                 print(f'You picked {weapon}!')
@@ -1577,7 +1590,7 @@ def battle():
                 T = random.randint(0, 20)
                 if T >= 15:
                     goblin4 -= tbs['weapons'][weapon]['Damage']+tbs['damagemod']
-                    print(f'You hit and dealt {tbs['weapons'][weapon]["Damage"]+tbs['damagemod']} damage!')
+                    print(f'You hit and dealt {tbs["weapons"][weapon]["Damage"]+tbs["damagemod"]} damage!')
 
                 elif T < 15:
                     tbs['health'] -= 3
@@ -1593,8 +1606,12 @@ def battle():
 
 def anewworld():
     global tbs
+    tbs['arc'] = 3
     tbs['inventory'] = []
+    tbs['weapons'] = []
     tbs['coinbag'] = None
+    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+        json.dump(tbs, file)
     wait()
     print('You awake in a damp, dark room. A torch shining in your face.')
     time.sleep(2)
