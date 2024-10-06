@@ -7,7 +7,6 @@ import random
 import sys
 import time
 
-# Initial tbs dictionary
 tbs = {
     'Name': None,
     'CheckedDraw': False,
@@ -34,7 +33,6 @@ tbs = {
     'achievements': [],
     'arc': 0
 }
-devtools = False
 weaponsL = {
     'Dagger - 4 Damage': {'Damage': 4},
     "Fist - 2 Damage": {'Damage': 2},
@@ -62,10 +60,34 @@ drunk = "\033[3mDrunk\033[0m"
 gob = "\033[3mGoblin\033[0m"
 
 def character_customization():
-    global devtools, tbs
-    leave = False
+    global tbs
     tbs['Name'] = input("Hello, what would you like your name to be? (Enter your previous character's name if you wish to play from a save file): ")
-    filename = f"{tbs['Name'.lower()]}.json"
+    if tbs['Name'].lower() == "dev":
+        print("DevTools enabled!")
+        while 1 > 0:
+            T = input('Enter code or l to leave:\n')
+            if T.lower() == 'l':
+                print('Leaving...')
+                break
+            elif T.lower() == 'money':
+                tbs['coinbag'] = 10000
+                print(f'Coinbag has {tbs["coinbag"]} coins.')
+            elif T.lower() == 'arc':
+                while 1 > 0:
+                    t = input('Enter arc or b to go back:\n')
+                    if t == 1:
+                        start()
+                    elif t == 2:
+                        outside()
+                    elif t == 3:
+                        anewworld()
+                    elif t.lower() == 'b':
+                        break
+                    else:
+                        print('Invalid, enter 1-3')
+            else:
+                print('Invalid')
+    filename = f"{tbs['Name'].lower()}.json"
     if os.path.isfile(filename):
         t = input(f"Would you look at that! We found a save with that name, would you prefer to load that character? (Y/N)\n {tbs['Name']}.")
         if t.lower() == 'y':
@@ -83,21 +105,6 @@ def character_customization():
     Choice = input(f"Great! So your name is {tbs['Name']}? (Y/N)\n")
     if Choice.upper() == "Y":
         print("Great! Now let's continue...")
-    elif Choice.lower() == "dev":
-        devtools = True
-        print("DevTools enabled!")
-        while not leave:
-            T = input('Enter code or l to leave:\n')
-            if T.lower() == 'l':
-                print('Leaving...')
-                break
-            elif T.lower() == 'money':
-                tbs['coinbag'] = 10000
-                print(f'Coinbag has {tbs["coinbag"]} coins.')
-            # Additional dev tools commands...
-            else:
-                print('Invalid')
-
     else:
         T = input("Oh. Ok, so would you like to restart? (Y/N)\n")
         if T.lower() == "y":
@@ -128,7 +135,7 @@ def wait():
 def start():
     global tbs
     tbs['arc'] = 1
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     print("You awake in a bed, the soft covers keeping you warm. You're in a room, fitted with a dresser and cobblestone walls.")
@@ -555,7 +562,7 @@ def doctor():
 def outside():
     global tbs
     tbs['arc'] = 2
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     if tbs['outsideF']:
@@ -607,7 +614,7 @@ def outside():
 
 def barfight():
     global drunk1, drunk2, drunk3, tbs
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     while drunk1 > 0 or drunk2 > 0 or drunk3 > 0:
@@ -721,7 +728,7 @@ def DKtavern1():
         T = random.randint(1, 60)
 
         if T < 10:
-            with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+            with open(f'{tbs["Name"].lower()}.json', 'w') as file:
                 json.dump(tbs, file)
             print('But soon you realize you walked yourself straight into a barfight.')
             barfight()
@@ -1384,7 +1391,7 @@ Your inventory: {tbs['inventory']}\n
         outside()
 
 def wagon():
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     print('\033[3mYou hop on to the wagon. Timo is sitting holding the reins. He is a large male, one of his eyes is covered by a eye patch.\033[0m')
@@ -1473,7 +1480,7 @@ def wagon():
 
 def battle():
     global tbs, goblin1, goblin2, goblin3, goblin4, c2
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     while goblin1 > 0 or goblin2 > 0 or goblin3 > 0 or goblin4 > 0:
@@ -1610,7 +1617,7 @@ def anewworld():
     tbs['inventory'] = []
     tbs['weapons'] = []
     tbs['coinbag'] = None
-    with open(f'{tbs["Name".lower()]}.json', 'w') as file:
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
         json.dump(tbs, file)
     wait()
     print('You awake in a damp, dark room. A torch shining in your face.')
