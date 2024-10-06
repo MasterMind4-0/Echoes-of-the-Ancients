@@ -31,7 +31,10 @@ tbs = {
     'coinbag': 0,
     'weapons': ["Fists - 2 Damage"],
     'achievements': [],
-    'arc': 0
+    'arc': 0,
+    'time': 0,
+    'heat': 0,
+    'guard_sch_hint': 1
 }
 weaponsL = {
     'Dagger - 4 Damage': {'Damage': 4},
@@ -75,11 +78,11 @@ def character_customization():
             elif T.lower() == 'arc':
                 while 1 > 0:
                     t = input('Enter arc or b to go back:\n')
-                    if t == 1:
+                    if t == '1':
                         start()
-                    elif t == 2:
+                    elif t == '2':
                         outside()
-                    elif t == 3:
+                    elif t == '3':
                         anewworld()
                     elif t.lower() == 'b':
                         break
@@ -1628,7 +1631,7 @@ def anewworld():
     time.sleep(2)
     print(f'{gob}2: You been kidnapped!')
     time.sleep(1)
-    print('The goblins snicker,')
+    print('The goblins snicker.')
     time.sleep(1)
     print(f'{gob}1: Come, Leader wish us not here.')
     time.sleep(1)
@@ -1640,24 +1643,80 @@ def anewworld():
 
 def esc():
     global tbs
-    T = input('Do you attempt to rub the rope on the rough walls, try to bite through them, or accept your fate? (1, 2, or 3?)\n')
-    if T == '1':
-        tbs['health'] -= 2
-        print('You decided to use the wall to aid your escape.')
-        wait()
-        print('After some time, you finally manange to tear through the rope. After facing some burns yourself.')
-        time.sleep(2)
-    elif T == '2':
-        print('\033[3m"Maybe I can tear it with my teeth."\033[0m')
+    tbs['time'] = 3
+    print('You sit there, moping.')
+    time.sleep(1)
+    esc_hub()
+
+def esc_hub():
+    global tbs
+    with open(f'{tbs["Name"].lower()}.json', 'w') as file:
+        json.dump(tbs, file)
+    if tbs['heat'] < 0:
+        tbs['heat'] = 0
+    print(f"\nHeat: {tbs['heat']}\nTime: {tbs['time']} hours\n")
+    t = input('You can study the guards schedule, build a tunnel, or await? (1, 2, or 3?)\n')
+    if t.lower() == '1':
+        if tbs['time'] >6 and tbs['time'] >21:
+            if tbs['guard_sch_hint'] == 1:
+                tbs['time'] += 1
+                print('You spend your time studying the guards schedule.')
+                time.sleep(1)
+                print("You notice that there is a gap sometime between the hours 8 - 14.")
+                esc_hub()
+            elif tbs['guard_sch_hint'] == 2:
+                tbs['time'] += 2
+                print('You spend your time studying the guards schedule.')
+                time.sleep(1)
+                print('You manage to get closer to figuring out when the gap is, you know it is sometime between the hours 9 - 12.')
+                esc_hub()
+            else:
+                lucky = random.randint(0, 50)
+                if lucky > 34:
+                    tbs['tunnel_pass'] = True
+                    tbs['time'] += 3
+                    print('You spend your time studying the guards schedule.')
+                    time.sleep(1)
+                    print('You nail it! You finally are confident enough to know that the guards are gone at the hours 9 - 11.')
+                    esc_hub()
+                else:
+                    tbs['time'] += 6
+                    print('You spend your time studying the guards schedule.')
+                    time.sleep(1)
+                    print("However, after more hours than you expected, you still can't seem to figure out what is missing.")
+                    esc_hub()
+        else:
+            print("You are too tired to try to figure out the guard's schedule.")
+            esc_hub()
+    elif t.lower() == '2':
+        if tbs['tunnel_pass']:
+            if "Spoon" in tbs['inventory']:
+                tunnel -= 4
+                tbs['heat'] += 9
+                print('You spend two hours digging a tunnel with your spoon, making it much easier.')
+                time.sleep(1)
+                print('You finish before anyone notices...')
+                esc_hub()
+            else:
+                tunnel -= 2
+                tbs['heat'] += 10
+                print('You spend two hours digging a tunnel with your hands.')
+                time.sleep(1)
+                print('You finish before anyone notices...')
+                esc_hub()
+        else:
+            print(f"{tbs['Name']}: The guards will probably spot me...")
+            esc_hub()
+    elif t.lower() == '3':
+        print('You choose to rest and wait for sometime.')
         time.sleep(1)
-        print('You start using your mouth to bite down on the rope.')
+        tbs['time'] = input(f'{tbs['Name']}: What time should I wake up (0 - 24)?\n')
+        tbs['time'] = int(tbs['time'])
+        tbs['heat'] -= tbs['time']*.25
+        tbs['heat'] = round(tbs['heat'])
         wait()
-        print("After some time it finally ends up tearing.")
-        time.sleep(1)
-    elif T == '3':
-        print('You lay back into the stone. You accept your fate.')
-        sys.exit()
-    esc1()
+        print(f'You wake up at {tbs['time']} hours.')
+        esc_hub()
 
 def esc1():
     print('') 
